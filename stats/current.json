@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-08-27T11:17:49.725901+00:00",
+  "generated_at": "2026-08-27T11:31:15.267408+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "oss": {
-    "credits": 255601,
+    "credits": 98766,
     "limit": 400000,
-    "percent": 63.9,
-    "runs": 2317
+    "percent": 24.7,
+    "runs": 841
   },
   "private": {
     "credits": 0,
@@ -18,10 +18,10 @@
   },
   "projects": [
     {
-      "credits": 172515,
+      "credits": 45344,
       "name": "ftn",
       "private": false,
-      "runs": 1117
+      "runs": 357
     },
     {
       "credits": 26124,
@@ -30,34 +30,34 @@
       "runs": 159
     },
     {
-      "credits": 19954,
-      "name": "agent-swarm",
-      "private": false,
-      "runs": 631
-    },
-    {
       "credits": 17258,
       "name": "pshelf",
       "private": false,
       "runs": 98
     },
     {
-      "credits": 9421,
-      "name": "dbt-duckdb",
+      "credits": 4239,
+      "name": "agent-swarm",
       "private": false,
-      "runs": 109
+      "runs": 101
     },
     {
-      "credits": 7738,
-      "name": "stripe-toddler",
+      "credits": 1747,
+      "name": "dbt-duckdb",
       "private": false,
-      "runs": 136
+      "runs": 19
     },
     {
       "credits": 1693,
       "name": "nas-port-mcp",
       "private": false,
       "runs": 47
+    },
+    {
+      "credits": 1463,
+      "name": "stripe-toddler",
+      "private": false,
+      "runs": 40
     },
     {
       "credits": 898,
@@ -67,10 +67,28 @@
     }
   ],
   "totals": {
-    "oss_credits": 255601,
+    "oss_credits": 98766,
     "private_credits": 0,
-    "total_credits": 255601,
-    "total_runs": 2317
+    "total_credits": 98766,
+    "total_runs": 841
   },
-  "window": "trailing-30-days"
+  "window": "last-30-days",
+  "windows": {
+    "last-24-hours": {
+      "credits": 2322,
+      "runs": 17
+    },
+    "last-30-days": {
+      "credits": 98766,
+      "runs": 841
+    },
+    "last-7-days": {
+      "credits": 38292,
+      "runs": 309
+    },
+    "last-90-days": {
+      "credits": 255601,
+      "runs": 2317
+    }
+  }
 }

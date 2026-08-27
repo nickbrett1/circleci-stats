@@ -41,7 +41,7 @@
   <h1>CircleCI — credit usage</h1>
   <div class="meta" id="meta"></div>
   <div class="buckets" id="buckets"></div>
-  <div class="trend-title">Credits per week — all projects</div>
+  <div class="trend-title">Cumulative credits by trailing window</div>
   <div id="trend">Loading…</div>
   <div id="content"></div>
 <script>
@@ -67,7 +67,7 @@ async function load() {
     const cur = await cr.json();
     const hist = hr.ok ? await hr.json() : { weeks: [] };
     renderBuckets(cur);
-    renderTrend(hist);
+    renderTrend(cur);
     renderTable(cur);
     renderMeta(cur);
   } catch (e) {
@@ -91,38 +91,28 @@ function renderBuckets(cur) {
     + bucketCard("Private — 30k", cur.private);
 }
 
-function renderTrend(hist) {
-  const weeks = hist.weeks || [];
-  const series = weeks.map((w) => ({ week: w.week, credits: (w.org && w.org.credits) || 0 }));
+function renderTrend(cur) {
   const el = document.getElementById("trend");
-  if (series.length < 2) {
-    el.innerHTML = '<div class="empty">Not enough weekly data yet (collector ran in snapshot mode).</div>';
-    return;
-  }
-  const W = 320, H = 84, padL = 6, padR = 6, padT = 8, padB = 18;
-  const maxV = Math.max(1, ...series.map((s) => s.credits));
-  const plotW = W - padL - padR, plotH = H - padT - padB;
-  const x = (i) => padL + (series.length === 1 ? plotW / 2 : (i * plotW) / (series.length - 1));
-  const y = (v) => padT + ((maxV - v) / maxV) * plotH;
-  const pts = series.map((s, i) => x(i).toFixed(1) + "," + y(s.credits).toFixed(1));
-  let area = "M" + pts[0];
-  for (let i = 1; i < pts.length; i++) area += " L" + pts[i];
-  area += " L" + x(series.length - 1).toFixed(1) + "," + (padT + plotH).toFixed(1)
-        + " L" + x(0).toFixed(1) + "," + (padT + plotH).toFixed(1) + " Z";
-  let circles = "", labels = "";
-  series.forEach((s, i) => {
-    const cx = x(i).toFixed(1), cy = y(s.credits).toFixed(1);
-    circles += '<circle cx="' + cx + '" cy="' + cy + '" r="2.4" fill="#60a5fa">'
-      + "<title>" + s.week + ": " + fmt(s.credits) + " credits</title></circle>";
-    if (i === 0 || i === series.length - 1 || i % 2 === 1) {
-      labels += '<text x="' + cx + '" y="' + (H - 5) + '" font-size="8" text-anchor="middle" opacity=".55">' + s.week.slice(5) + "</text>";
-    }
+  const w = cur && cur.windows ? cur.windows : null;
+  if (!w) { el.innerHTML = '<div class="empty">No trend data yet</div>'; return; }
+  const order = ["last-24-hours", "last-7-days", "last-30-days", "last-90-days"];
+  const label = { "last-24-hours": "24h", "last-7-days": "7d", "last-30-days": "30d", "last-90-days": "90d" };
+  const rows = order.filter((k) => k in w).map((k) => ({ key: k, credits: w[k].credits || 0 }));
+  const maxV = Math.max(1, ...rows.map((r) => r.credits));
+  const H = 20 + rows.length * 16 + 4;
+  const W = 300;
+  let html = '<svg viewBox="0 0 ' + W + " " + H + '" style="width:100%;max-width:420px" preserveAspectRatio="xMidYMid meet">';
+  rows.forEach((r, i) => {
+    const y = 6 + i * 16;
+    const bw = Math.max(4, (r.credits / maxV) * (W - 90));
+    const c = r.credits > 0 ? "#60a5fa" : "rgba(148,163,184,.4)";
+    html += '<rect x="90" y="' + y + '" width="' + bw.toFixed(1) + '" height="9" rx="2" fill="' + c + '">'
+      + "<title>" + label[r.key] + ": " + fmt(r.credits) + " credits</title></rect>";
+    html += '<text x="86" y="' + (y + 8) + '" font-size="9" text-anchor="end" opacity=".7">' + label[r.key] + "</text>";
+    html += '<text x="' + (94 + bw).toFixed(1) + '" y="' + (y + 8) + '" font-size="9" opacity=".9">' + fmt(r.credits) + "</text>";
   });
-  const svg = '<svg viewBox="0 0 ' + W + " " + H + '" style="width:100%;max-width:420px" preserveAspectRatio="xMidYMid meet">'
-    + '<path d="' + area + '" fill="rgba(96,165,250,.14)" stroke="none"/>'
-    + '<polyline points="' + pts.join(" ") + '" fill="none" stroke="#60a5fa" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>'
-    + circles + labels + "</svg>";
-  el.innerHTML = svg;
+  html += "</svg>";
+  el.innerHTML = html;
 }
 
 function renderTable(cur) {

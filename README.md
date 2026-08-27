@@ -34,11 +34,16 @@ Defaults are `OSS = 400,000` and `PRIVATE = 30,000` credits/mo. They are
 configurable via the `LIMIT_OSS` / `LIMIT_PRIVATE` env vars in the workflow —
 CircleCI changes these plans, so verify periodically.
 
-## Date-range / token caveat
+## About the CircleCI Insights API (verified 2026-08-27)
 
-The Insights org-summary endpoint may **ignore** `reporting-window`, `grouping`,
-and `start-date`/`end-date` depending on token scope. The collector probes once:
-if an old date-range query returns different credits than a recent one it
-assumes the API honors dates and backfills ~6 months of weekly buckets;
-otherwise it degrades gracefully to a single current snapshot (the weekly chart
-stays empty until a properly-scoped token is available).
+- `reporting-window` (last-24-hours / last-7-days / last-30-days / last-90-days)
+  **is honored** and returns genuinely different figures.
+- `start-date` / `end-date` are **not supported** on the org summary (silently
+  ignored, falls back to the default window), and the per-project `time-series`
+  endpoint that would expose granular weekly buckets returns **404** with this
+  org token. `grouping=week` is ignored on the summary.
+- CircleCI's API tokens (Personal / Project / Org) all use the same
+  `Circle-Token` header; there is **no separate token type** that unlocks date
+  range / weekly grouping. So the widget uses the **trailing-30-days** snapshot
+  for its bucket bars + table, plus a **cumulative multi-window strip**
+  (24h / 7d / 30d / 90d) as a lightweight trend instead of a weekly area chart.

@@ -2,13 +2,12 @@
 """CircleCI credit-usage collector for the Homepage widget.
 
 Writes:
-  stats/current.json — current-window snapshot: per-bucket totals (OSS / private)
-                       plus per-project rows for the widget header + table.
-  stats/history.json — weekly time series {weeks: [{week, org, projects}]},
-                       idempotent (upsert by week key, never trims).
+  stats/current.json — current snapshot (trailing 30 days): per-bucket totals
+                       (OSS / private) + per-project rows + a multi-window
+                       trend strip (24h / 7d / 30d / 90d cumulative credits).
 
 Requires env:
-  CIRCLE_TOKEN — CircleCI API token with Insights access.
+  CIRCLE_TOKEN — CircleCI API token (Org / CCIPAT_ token; sent as Circle-Token).
   GH_TOKEN     — GitHub PAT (repo read) used to tag each project private/public.
 
 Buckets (configurable constants below; verify against your CircleCI plan):
@@ -18,13 +17,16 @@ Buckets (configurable constants below; verify against your CircleCI plan):
 CircleCI does not tag a repo private/public, so visibility is derived from the
 GitHub API `private` flag per project.
 
-Date-range caveat (from the design memo): the Insights org-summary endpoint may
-ignore `reporting-window`, `grouping`, and `start-date`/`end-date` depending on
-token scope (this environment's token returns trailing-30-days regardless). The
-collector probes for that ONCE: if an old date-range query returns a different
-credit total than a recent one, the API honors date ranges and we backfill
-weekly buckets; otherwise we degrade gracefully to a single current snapshot
-(history stays shallow until a properly-scoped token is available).
+About the CircleCI Insights API (verified against a live org token):
+  * `reporting-window` IS honored: last-24-hours / last-7-days / last-30-days /
+    last-90-days return genuinely different figures.
+  * `start-date` / `end-date` are NOT supported on the org summary (silently
+    ignored -> returns the default window). The per-project `time-series`
+    endpoint that would expose granular weekly buckets returns 404 with this
+    token, and `grouping=week` is ignored on the summary.
+  * So a continuous multi-week history is NOT obtainable via this API/token.
+    The widget therefore uses the trailing-30-days snapshot for its buckets and
+    table, and a cumulative multi-window strip for a lightweight trend.
 """
 import argparse
 import datetime as dt
@@ -32,7 +34,6 @@ import json
 import os
 import sys
 import time
-import urllib.parse
 import urllib.request
 
 ORG_SLUG = os.environ.get("CIRCLE_ORG", "gh/nickbrett1")
@@ -46,6 +47,10 @@ LIMITS = {
     "oss": int(os.environ.get("LIMIT_OSS", 400000)),
     "private": int(os.environ.get("LIMIT_PRIVATE", 30000)),
 }
+
+# Named reporting windows (the ONLY date filtering the org Insights API honors).
+WINDOWS = ["last-24-hours", "last-7-days", "last-30-days", "last-90-days"]
+CURRENT_WINDOW = os.environ.get("CURRENT_WINDOW", "last-30-days")
 
 
 def circle(path: str) -> dict:
@@ -67,18 +72,8 @@ def gh(path: str) -> dict:
         return json.loads(r.read().decode())
 
 
-def summary(start_date: str = "", end_date: str = "") -> dict:
-    params = {}
-    if start_date:
-        params["start-date"] = start_date
-    if end_date:
-        params["end-date"] = end_date
-    qs = ("?" + urllib.parse.urlencode(params)) if params else ""
-    return circle(f"/insights/{ORG_SLUG}/summary{qs}")
-
-
-def monday_of(d: dt.date) -> dt.date:
-    return d - dt.timedelta(days=d.weekday())
+def summary(reporting_window: str) -> dict:
+    return circle(f"/insights/{ORG_SLUG}/summary?reporting-window={reporting_window}")
 
 
 def extract(d: dict) -> dict:
@@ -98,18 +93,6 @@ def extract(d: dict) -> dict:
     }
 
 
-def probe_date_support(now: dt.datetime) -> bool:
-    """True if the API honors date-range (old-range credits != recent credits)."""
-    try:
-        old = summary("2025-01-01", "2025-01-31")
-        cur = summary()
-        return extract(old)["credits"] != extract(cur)["credits"]
-    except Exception as e:
-        print(f"WARN: date-support probe failed ({e}); assuming not supported",
-              file=sys.stderr)
-        return False
-
-
 def project_visibility(projects: list) -> dict:
     """Map project name -> private bool, via the GitHub API."""
     out = {}
@@ -125,15 +108,7 @@ def project_visibility(projects: list) -> dict:
     return out
 
 
-def load_json(path: str, default):
-    try:
-        with open(path) as f:
-            return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        return default
-
-
-def build_current(extracted: dict, vis: dict, window: str, now: dt.datetime) -> dict:
+def build_current(extracted: dict, vis: dict, windows: dict, now: dt.datetime) -> dict:
     """Bucket the snapshot into OSS / private and emit widget-friendly json."""
     oss_c = oss_r = priv_c = priv_r = 0
     projects = []
@@ -153,7 +128,7 @@ def build_current(extracted: dict, vis: dict, window: str, now: dt.datetime) -> 
     total = oss_c + priv_c
     return {
         "generated_at": now.isoformat(),
-        "window": window,
+        "window": CURRENT_WINDOW,
         "limits": dict(LIMITS),
         "totals": {
             "total_credits": total,
@@ -169,6 +144,7 @@ def build_current(extracted: dict, vis: dict, window: str, now: dt.datetime) -> 
             "credits": priv_c, "runs": priv_r, "limit": LIMITS["private"],
             "percent": round(100 * priv_c / LIMITS["private"], 1) if LIMITS["private"] else 0,
         },
+        "windows": windows,
         "projects": projects,
     }
 
@@ -177,67 +153,42 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="stats/current.json")
     ap.add_argument("--history", default="stats/history.json")
-    ap.add_argument("--backfill", type=int, default=26,
-                    help="weeks of history to backfill (only when API honors dates; capped by ~13mo retention)")
     args = ap.parse_args()
 
     now = dt.datetime.now(dt.timezone.utc)
-    date_supported = probe_date_support(now)
-    print(f"API date-range honored: {date_supported}")
 
-    history = load_json(args.history, {"weeks": []})
-    seen = {w["week"] for w in history.get("weeks", [])}
+    # Multi-window trend strip (org-level credits+runs per named window).
+    windows = {}
+    for w in WINDOWS:
+        try:
+            e = extract(summary(w))
+            windows[w] = {"credits": e["credits"], "runs": e["runs"]}
+        except Exception as ex:
+            print(f"WARN: window {w} failed ({ex})", file=sys.stderr)
+            windows[w] = {"credits": 0, "runs": 0}
+        time.sleep(0.15)
+    print("windows:", {k: v["credits"] for k, v in windows.items()})
 
-    if date_supported:
-        # Backfill weekly buckets (oldest -> newest) so we append each once.
-        weeks = []
-        for k in range(args.backfill, 0, -1):
-            end = now.date() - dt.timedelta(days=7 * (k - 1))
-            weeks.append(end)
-        weeks.append(now.date())
-        for end in weeks:
-            mon = monday_of(end)
-            sun = mon + dt.timedelta(days=6)
-            key = mon.isoformat()
-            if key in seen:
-                continue
-            try:
-                d = summary(mon.isoformat(), sun.isoformat())
-                e = extract(d)
-            except Exception as ex:
-                print(f"WARN: week {key} failed ({ex})", file=sys.stderr)
-                continue
-            vis = project_visibility(list(e["projects"].keys()))
-            entry = {"week": key,
-                     "org": {"credits": e["credits"], "runs": e["runs"]},
-                     "projects": {n: {**p, "private": vis.get(n, False)}
-                                  for n, p in e["projects"].items()}}
-            history.setdefault("weeks", []).append(entry)
-            seen.add(key)
-            print(f"  week {key}: {e['credits']:,} credits / {e['runs']} runs")
-    else:
-        # Snapshot-only: keep history as-is (no reliable time series).
-        print("WARN: date-range not honored by this token; writing current "
-              "snapshot only (history will stay shallow until a scoped token is set)",
-              file=sys.stderr)
-
-    history["weeks"].sort(key=lambda w: w["week"])
-
-    # Current snapshot from the default (trailing-30 / month-to-date) query.
-    d = summary()
-    e = extract(d)
+    # Current snapshot from the CURRENT_WINDOW preset.
+    e = extract(summary(CURRENT_WINDOW))
     vis = project_visibility(list(e["projects"].keys()))
-    window = "trailing-30-days" if not date_supported else "month-to-date"
-    current = build_current(e, vis, window, now)
+    current = build_current(e, vis, windows, now)
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w") as f:
         json.dump(current, f, indent=2, sort_keys=True)
+    # history.json retained as a stable {weeks:[]} shape for forward-compat
+    # (populated only if a token ever exposes granular weekly buckets).
+    try:
+        with open(args.history) as f:
+            history = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        history = {"weeks": []}
     with open(args.history, "w") as f:
         json.dump(history, f, indent=2, sort_keys=True)
+
     print(f"wrote {args.out} + {args.history}: "
-          f"total {current['totals']['total_credits']:,} credits; "
-          f"{len(history['weeks'])} weeks in history")
+          f"{CURRENT_WINDOW} total {current['totals']['total_credits']:,} credits")
 
 
 if __name__ == "__main__":
