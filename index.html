@@ -36,6 +36,7 @@
   th { font-size: 8px; text-transform: uppercase; letter-spacing: .04em; opacity: .6; border-bottom: 1px solid rgba(148,163,184,.3); }
   td { border-bottom: 1px solid rgba(148,163,184,.1); font-size: 11px; }
   tr:last-child td { border-bottom: none; }
+  tr.total td { border-top: 2px solid rgba(148,163,184,.4); font-weight: 700; }
   .tag { font-size: 7px; padding: 0 4px; border-radius: 6px; margin-left: 4px; vertical-align: middle; }
   .tag.oss { background: rgba(74,222,128,.16); color: #4ade80; }
   .tag.priv { background: rgba(96,165,250,.16); color: #60a5fa; }
@@ -47,7 +48,7 @@
   <h1>CircleCI credits</h1><span class="meta" id="meta"></span>
   <div class="cycle" id="cycle"></div>
   <div class="buckets" id="buckets"></div>
-  <table id="table"><thead><tr><th>Project</th><th>Used this cycle</th><th>Proj. cycle</th><th>% limit</th></tr></thead><tbody id="tbody"></tbody></table>
+  <table id="table"><thead><tr><th>Project</th><th>Used this cycle</th><th>Proj. cycle</th><th>Proj % limit</th></tr></thead><tbody id="tbody"></tbody></table>
 <script>
 const CURRENT = "./stats/current.json";
 function fmt(n) { return n == null ? "–" : Math.round(n).toLocaleString(); }
@@ -64,29 +65,34 @@ async function load() {
     document.getElementById("meta").textContent = "updated " + gen;
 
     const c = cur.cycle;
-    const elFrac = Math.round((c.fraction_elapsed || 0) * 100);
     document.getElementById("cycle").innerHTML =
-      '<div class="bar"><div style="width:' + Math.min(elFrac, 100) + '%"></div></div>'
-      + '<div class="sub">' + c.start + " → " + c.end + " · day " + (c.elapsed_days + 1) + " of " + c.length_days
+      '<div class="sub">' + c.start + " → " + c.end + " · day " + (c.elapsed_days + 1) + " of " + c.length_days
       + " · " + c.remaining_days + " left</div>";
 
     const b = cur.buckets;
     const card = (label, x) =>
       '<div class="bucket"><div class="blabel">' + label + " · " + fmt(x.limit) + " limit</div>"
       + '<div class="row1"><span class="bnum">' + fmt(x.projected) + "</span>" + badge(x.status) + "</div>"
-      + '<div class="bsub">projected by cycle end</div>'
+      + '<div class="bsub">projected use by cycle end · ' + pct(x.projected_pct) + " of limit</div>"
       + '<div class="bar"><div style="width:' + Math.min(x.projected_pct || 0, 100) + "%;background:" + color(x.projected_pct) + '"></div></div>'
-      + '<div class="bsub">used so far ~' + fmt(x.used_so_far_est) + " (" + pct(x.projected_pct) + " of limit)</div></div>";
+      + '<div class="bsub">used so far ~' + fmt(x.used_so_far_est) + " (" + pct(x.limit ? (100 * x.used_so_far_est / x.limit) : 0) + " of limit)</div></div>";
     document.getElementById("buckets").innerHTML = card("OSS (public)", b.oss) + card("Private", b.private);
 
     const rows = cur.projects.slice().sort((a, z) => z.projected - a.projected);
     const tag = (p) => p ? '<span class="tag priv">P</span>' : '<span class="tag oss">O</span>';
     const ccol = (pp) => pp >= 100 ? "#ef4444" : pp >= 80 ? "#f59e0b" : "";
-    document.getElementById("tbody").innerHTML = rows.map(r =>
+    let tbody = rows.map(r =>
       "<tr><td>" + r.name + tag(r.private) + "</td>"
       + "<td>" + fmt(r.used_so_far) + "</td>"
       + "<td>" + fmt(r.projected) + "</td>"
       + '<td style="color:' + ccol(r.projected_pct) + '">' + pct(r.projected_pct) + "</td></tr>").join("");
+    // Total row (sums across projects; % against the OSS bucket limit).
+    const totUsed = rows.reduce((s, r) => s + (r.used_so_far || 0), 0);
+    const totProj = rows.reduce((s, r) => s + (r.projected || 0), 0);
+    const totPct = cur.limits && cur.limits.oss ? (100 * totProj / cur.limits.oss) : 0;
+    tbody += '<tr class="total"><td>Total</td><td>' + fmt(totUsed) + '</td><td>' + fmt(totProj)
+      + '</td><td style="color:' + ccol(totPct) + '">' + pct(Math.round(totPct * 10) / 10) + "</td></tr>";
+    document.getElementById("tbody").innerHTML = tbody;
   } catch (e) {
     document.getElementById("buckets").innerHTML = '<div class="error">Failed: ' + e.message + "</div>";
   }
