@@ -12,24 +12,30 @@
   h1 { font-size: 13px; margin: 0 0 2px; font-weight: 600; }
   .meta { font-size: 10px; opacity: .55; margin-bottom: 8px; }
 
-  .buckets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  .cycle { margin-bottom: 8px; }
+  .cycle .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .7; }
+  .cycle .bar { height: 8px; background: rgba(148,163,184,.2); border-radius: 4px; overflow: hidden; margin: 3px 0; }
+  .cycle .bar > div { height: 100%; background: #60a5fa; border-radius: 4px; }
+  .cycle .sub { font-size: 10px; opacity: .7; }
+
+  .buckets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
   @media (max-width: 320px) { .buckets { grid-template-columns: 1fr; } }
   .bucket { border: 1px solid rgba(148,163,184,.25); border-radius: 6px; padding: 8px; }
   .bucket .blabel { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .7; }
-  .bucket .bnum { font-size: 17px; font-weight: 700; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
-  .bucket .bsub { font-size: 10px; opacity: .6; }
+  .bucket .bnum { font-size: 15px; font-weight: 700; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+  .bucket .bsub { font-size: 10px; opacity: .62; margin-top: 1px; }
+  .badge { display: inline-block; font-size: 8.5px; font-weight: 700; padding: 1px 6px; border-radius: 8px; text-transform: uppercase; letter-spacing: .04em; }
+  .badge.on-track { background: rgba(74,222,128,.18); color: #4ade80; }
+  .badge.at-risk { background: rgba(245,158,11,.18); color: #f59e0b; }
+  .badge.exceed { background: rgba(239,68,68,.18); color: #ef4444; }
   .bar { height: 7px; background: rgba(148,163,184,.2); border-radius: 4px; margin-top: 7px; overflow: hidden; }
-  .bar > div { height: 100%; border-radius: 4px; transition: width .5s; }
-
-  .trend-title { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; opacity: .6; margin: 6px 0 2px; }
-  .empty { font-size: 10px; opacity: .6; padding: 6px 0; }
+  .bar > div { height: 100%; border-radius: 4px; }
 
   table { width: 100%; border-collapse: collapse; margin-top: 6px; }
   th, td { text-align: right; padding: 3px 8px; white-space: nowrap; }
   th:first-child, td:first-child { text-align: left; }
   th { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .65; border-bottom: 1px solid rgba(148,163,184,.35); }
   td { border-bottom: 1px solid rgba(148,163,184,.12); font-variant-numeric: tabular-nums; }
-  tr.total td { border-top: 2px solid rgba(148,163,184,.45); border-bottom: none; font-weight: 700; }
   .tag { font-size: 8px; padding: 1px 5px; border-radius: 8px; margin-left: 6px; vertical-align: middle; }
   .tag.oss { background: rgba(74,222,128,.18); color: #4ade80; }
   .tag.priv { background: rgba(96,165,250,.18); color: #60a5fa; }
@@ -40,109 +46,92 @@
 <body>
   <h1>CircleCI — credit usage</h1>
   <div class="meta" id="meta"></div>
+  <div class="cycle" id="cycle"></div>
   <div class="buckets" id="buckets"></div>
-  <div class="trend-title">Cumulative credits by trailing window</div>
-  <div id="trend">Loading…</div>
   <div id="content"></div>
 <script>
 const CURRENT = "./stats/current.json";
-const HISTORY = "./stats/history.json";
 
 function fmt(n) { return n.toLocaleString(); }
+function pct(v) { return v == null ? "–" : v + "%"; }
 
-// Colour shifts from green -> amber -> red as usage approaches/exceeds the limit.
-function barColor(percent) {
-  if (percent >= 100) return "#ef4444";
-  if (percent >= 75) return "#f59e0b";
-  return "#4ade80";
+function color(p) { return p >= 100 ? "#ef4444" : p >= 80 ? "#f59e0b" : "#4ade80"; }
+function badge(s) {
+  const m = { "on-track": "on track", "at-risk": "at risk", "exceed": "will exceed" };
+  return '<span class="badge ' + s + '">' + (m[s] || s) + "</span>";
 }
 
 async function load() {
   try {
-    const [cr, hr] = await Promise.all([
-      fetch(CURRENT, { cache: "no-store" }),
-      fetch(HISTORY, { cache: "no-store" }),
-    ]);
-    if (!cr.ok) throw new Error("stats HTTP " + cr.status);
-    const cur = await cr.json();
-    const hist = hr.ok ? await hr.json() : { weeks: [] };
-    renderBuckets(cur);
-    renderTrend(cur);
-    renderTable(cur);
+    const r = await fetch(CURRENT, { cache: "no-store" });
+    if (!r.ok) throw new Error("stats HTTP " + r.status);
+    const cur = await r.json();
     renderMeta(cur);
+    renderCycle(cur);
+    renderBuckets(cur);
+    renderTable(cur);
   } catch (e) {
     document.getElementById("buckets").innerHTML =
       '<div class="error">Failed to load stats: ' + e.message + "</div>";
   }
 }
 
-function bucketCard(label, b) {
-  const pct = b.percent || 0;
-  return '<div class="bucket"><div class="blabel">' + label + "</div>"
-    + '<div class="bnum">' + fmt(b.credits) + "</div>"
-    + '<div class="bsub">of ' + fmt(b.limit) + " · " + pct + "% · " + fmt(b.runs) + " runs</div>"
-    + '<div class="bar"><div style="width:' + Math.min(pct, 100) + "%;background:" + barColor(pct) + '"></div></div></div>';
-}
-
-function renderBuckets(cur) {
-  const el = document.getElementById("buckets");
-  if (!cur || !cur.oss) { el.innerHTML = '<div class="empty">No data yet</div>'; return; }
-  el.innerHTML = bucketCard("OSS (public) — 400k", cur.oss)
-    + bucketCard("Private — 30k", cur.private);
-}
-
-function renderTrend(cur) {
-  const el = document.getElementById("trend");
-  const w = cur && cur.windows ? cur.windows : null;
-  if (!w) { el.innerHTML = '<div class="empty">No trend data yet</div>'; return; }
-  const order = ["last-24-hours", "last-7-days", "last-30-days", "last-90-days"];
-  const label = { "last-24-hours": "24h", "last-7-days": "7d", "last-30-days": "30d", "last-90-days": "90d" };
-  const rows = order.filter((k) => k in w).map((k) => ({ key: k, credits: w[k].credits || 0 }));
-  const maxV = Math.max(1, ...rows.map((r) => r.credits));
-  const H = 20 + rows.length * 16 + 4;
-  const W = 300;
-  let html = '<svg viewBox="0 0 ' + W + " " + H + '" style="width:100%;max-width:420px" preserveAspectRatio="xMidYMid meet">';
-  rows.forEach((r, i) => {
-    const y = 6 + i * 16;
-    const bw = Math.max(4, (r.credits / maxV) * (W - 90));
-    const c = r.credits > 0 ? "#60a5fa" : "rgba(148,163,184,.4)";
-    html += '<rect x="90" y="' + y + '" width="' + bw.toFixed(1) + '" height="9" rx="2" fill="' + c + '">'
-      + "<title>" + label[r.key] + ": " + fmt(r.credits) + " credits</title></rect>";
-    html += '<text x="86" y="' + (y + 8) + '" font-size="9" text-anchor="end" opacity=".7">' + label[r.key] + "</text>";
-    html += '<text x="' + (94 + bw).toFixed(1) + '" y="' + (y + 8) + '" font-size="9" opacity=".9">' + fmt(r.credits) + "</text>";
-  });
-  html += "</svg>";
-  el.innerHTML = html;
-}
-
-function renderTable(cur) {
-  const el = document.getElementById("content");
-  if (!cur || !cur.projects) { el.innerHTML = '<div class="empty">No data yet</div>'; return; }
-  let rows = cur.projects.slice();
-  rows.sort((a, b) => b.credits - a.credits);
-  let oss = 0, priv = 0;
-  for (const r of rows) { if (r.private) priv += r.credits; else oss += r.credits; }
-  const tag = (p) => p ? '<span class="tag priv">PRIVATE</span>' : '<span class="tag oss">OSS</span>';
-  let html = '<table><thead><tr><th>Project</th><th>Credits</th><th>Runs</th><th>% of bucket</th></tr></thead><tbody>';
-  for (const r of rows) {
-    const limit = r.private ? cur.private.limit : cur.oss.limit;
-    const pct = limit ? ((r.credits / limit) * 100).toFixed(1) : "0";
-    html += "<tr><td>" + r.name + tag(r.private) + "</td>"
-      + "<td>" + fmt(r.credits) + "</td>"
-      + "<td>" + fmt(r.runs) + "</td><td>" + pct + "%</td></tr>";
-  }
-  html += '<tr class="total"><td>OSS bucket</td><td>' + fmt(oss) + "</td><td></td><td></td></tr>";
-  html += '<tr class="total"><td>Private bucket</td><td>' + fmt(priv) + "</td><td></td><td></td></tr>";
-  html += "</tbody></table>";
-  el.innerHTML = html;
-}
-
 function renderMeta(cur) {
   const el = document.getElementById("meta");
   if (!cur) { el.textContent = "no data"; return; }
   const gen = cur.generated_at ? new Date(cur.generated_at).toLocaleString() : "unknown";
-  el.textContent = "Window: " + (cur.window || "current") + " · Total " + fmt(cur.totals.total_credits)
-    + " credits · Updated " + gen + " — weekly by GitHub Actions";
+  el.textContent = "Projected from recent burn · updated " + gen;
+}
+
+function renderCycle(cur) {
+  const el = document.getElementById("cycle");
+  if (!cur || !cur.cycle) { el.innerHTML = ""; return; }
+  const c = cur.cycle;
+  const elFrac = Math.round((c.fraction_elapsed || 0) * 100);
+  el.innerHTML =
+    '<div class="lbl">Cycle ' + c.start + " → " + c.end + "</div>"
+    + '<div class="bar"><div style="width:' + Math.min(elFrac, 100) + '%"></div></div>'
+    + '<div class="sub">Day ' + (c.elapsed_days + 1) + " of " + c.length_days
+    + " · " + c.remaining_days + " days left</div>";
+}
+
+function bucketCard(label, b) {
+  if (!b) return "";
+  const proj = b.projected || 0, p = b.projected_pct || 0;
+  const sub = "~" + fmt(b.used_so_far_est || 0) + " used so far · "
+    + (b.daily_burn || 0).toLocaleString() + "/day";
+  const c30 = b.recent30_pct != null ? " · past 30d: " + fmt(b.recent30_credits || 0) + " (" + pct(b.recent30_pct) + ")" : "";
+  return '<div class="bucket"><div class="blabel">' + label + ' &middot; ' + fmt(b.limit) + " limit</div>"
+    + '<div class="bnum">' + fmt(proj) + " <span style='font-size:10px;opacity:.6;font-weight:400'>est. by cycle end</span></div>"
+    + '<div class="bsub">' + sub + c30 + "</div>"
+    + '<div class="bar"><div style="width:' + Math.min(p, 100) + "%;background:" + color(p) + '"></div></div>'
+    + '<div class="bsub" style="margin-top:3px">' + badge(b.status) + " &middot; " + pct(p) + " of limit projected</div></div>";
+}
+
+function renderBuckets(cur) {
+  const el = document.getElementById("buckets");
+  if (!cur || !cur.buckets) { el.innerHTML = '<div class="empty">No data yet</div>'; return; }
+  el.innerHTML = bucketCard("OSS (public)", cur.buckets.oss)
+    + bucketCard("Private", cur.buckets.private);
+}
+
+function renderTable(cur) {
+  const el = document.getElementById("content");
+  if (!cur || !cur.projects) { el.innerHTML = ""; return; }
+  const rows = cur.projects.slice().sort((a, b) => b.projected - a.projected);
+  const tag = (p) => p ? '<span class="tag priv">PRIVATE</span>' : '<span class="tag oss">OSS</span>';
+  const cellColor = (pp) => pp >= 100 ? "#ef4444" : pp >= 80 ? "#f59e0b" : "";
+  let html = '<table><thead><tr><th>Project</th><th>7d credits</th><th>/day</th>'
+    + '<th>Proj. cycle</th><th>% limit</th></tr></thead><tbody>';
+  for (const r of rows) {
+    html += "<tr><td>" + r.name + tag(r.private) + "</td>"
+      + "<td>" + fmt(r.recent7_credits || 0) + "</td>"
+      + "<td>" + fmt(r.daily_burn || 0) + "</td>"
+      + "<td>" + fmt(r.projected || 0) + "</td>"
+      + '<td style="color:' + cellColor(r.projected_pct) + '">' + pct(r.projected_pct) + "</td></tr>";
+  }
+  html += "</tbody></table>";
+  el.innerHTML = html;
 }
 
 load();

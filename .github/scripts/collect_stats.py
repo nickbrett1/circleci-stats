@@ -1,34 +1,29 @@
 #!/usr/bin/env python3
-"""CircleCI credit-usage collector for the Homepage widget.
+"""CircleCI credit-usage collector for the Homepage widget (cycle-based).
 
-Writes:
-  stats/current.json — current snapshot (trailing 30 days): per-bucket totals
-                       (OSS / private) + per-project rows + a multi-window
-                       trend strip (24h / 7d / 30d / 90d cumulative credits).
+The CircleCI Insights org-summary API only honours `reporting-window`
+presets (last-24-hours / last-7-days / last-30-days / last-90-days); it does
+NOT support arbitrary start/end dates or weekly grouping, and the per-project
+time-series endpoint 404s. So this collector uses those trailing windows to
+compute a **daily burn rate** and projects it across the credit cycle (which
+starts on a configurable day of the month, default the 23rd).
+
+Writes stats/current.json:
+  cycle     - the credit-cycle window (start, end, elapsed, remaining, fraction)
+  rates     - daily burn from trailing 7d and 30d windows
+  buckets   - per bucket (oss 400k / private 30k): daily burn, estimated usage
+              so far, projected end-of-cycle usage + %, and an on-track status
+  projects  - per-project recent burn + projected usage (for the table)
+  windows   - raw trailing-window org totals (context)
 
 Requires env:
-  CIRCLE_TOKEN — CircleCI API token (Org / CCIPAT_ token; sent as Circle-Token).
-  GH_TOKEN     — GitHub PAT (repo read) used to tag each project private/public.
-
-Buckets (configurable constants below; verify against your CircleCI plan):
-  OSS     = 400,000 credits/mo  (public repos)
-  PRIVATE =  30,000 credits/mo  (private repos)
-
-CircleCI does not tag a repo private/public, so visibility is derived from the
-GitHub API `private` flag per project.
-
-About the CircleCI Insights API (verified against a live org token):
-  * `reporting-window` IS honored: last-24-hours / last-7-days / last-30-days /
-    last-90-days return genuinely different figures.
-  * `start-date` / `end-date` are NOT supported on the org summary (silently
-    ignored -> returns the default window). The per-project `time-series`
-    endpoint that would expose granular weekly buckets returns 404 with this
-    token, and `grouping=week` is ignored on the summary.
-  * So a continuous multi-week history is NOT obtainable via this API/token.
-    The widget therefore uses the trailing-30-days snapshot for its buckets and
-    table, and a cumulative multi-window strip for a lightweight trend.
+  CIRCLE_TOKEN - CircleCI API token (Circle-Token header).
+  GH_TOKEN     - GitHub PAT (repo read) for the public/private flag.
+  CYCLE_START_DAY - day of month the credit cycle starts (default 23).
+  LIMIT_OSS / LIMIT_PRIVATE - monthly credit limits (default 400000 / 30000).
 """
 import argparse
+import calendar
 import datetime as dt
 import json
 import os
@@ -38,36 +33,36 @@ import urllib.request
 
 ORG_SLUG = os.environ.get("CIRCLE_ORG", "gh/nickbrett1")
 GH_OWNER = os.environ.get("GH_OWNER", "nickbrett1")
+CYCLE_START_DAY = int(os.environ.get("CYCLE_START_DAY", "23"))
 
 CIRCLE_API = "https://circleci.com/api/v2"
 GITHUB_API = "https://api.github.com"
 
-# Bucket limits (credits / month). Make configurable — CircleCI changes these.
 LIMITS = {
-    "oss": int(os.environ.get("LIMIT_OSS", 400000)),
-    "private": int(os.environ.get("LIMIT_PRIVATE", 30000)),
+    "oss": int(os.environ.get("LIMIT_OSS", "400000")),
+    "private": int(os.environ.get("LIMIT_PRIVATE", "30000")),
 }
 
-# Named reporting windows (the ONLY date filtering the org Insights API honors).
-WINDOWS = ["last-24-hours", "last-7-days", "last-30-days", "last-90-days"]
-CURRENT_WINDOW = os.environ.get("CURRENT_WINDOW", "last-30-days")
 
-
-def circle(path: str) -> dict:
+def circle(path: str, retries: int = 4) -> dict:
     req = urllib.request.Request(CIRCLE_API + path, headers={
-        "Circle-Token": os.environ["CIRCLE_TOKEN"],
-        "Accept": "application/json",
-    })
-    with urllib.request.urlopen(req, timeout=30) as r:
-        return json.loads(r.read().decode())
+        "Circle-Token": os.environ["CIRCLE_TOKEN"], "Accept": "application/json"})
+    for attempt in range(retries):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                return json.loads(r.read().decode())
+        except urllib.error.HTTPError as e:
+            if e.code == 429 and attempt < retries - 1:
+                time.sleep(2 ** (attempt + 1))  # 2,4,8s backoff
+                continue
+            raise
+    raise RuntimeError("unreachable")
 
 
 def gh(path: str) -> dict:
     req = urllib.request.Request(GITHUB_API + path, headers={
         "Authorization": f"Bearer {os.environ['GH_TOKEN']}",
-        "Accept": "application/vnd.github+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-    })
+        "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.loads(r.read().decode())
 
@@ -77,7 +72,7 @@ def summary(reporting_window: str) -> dict:
 
 
 def extract(d: dict) -> dict:
-    """Pull {credits, runs} out of an org-summary response (org + per-project)."""
+    """Pull org + per-project {credits, runs} from an org-summary response."""
     org_m = (d.get("org_data") or {}).get("metrics") or {}
     projects = {}
     for p in d.get("org_project_data") or []:
@@ -86,109 +81,150 @@ def extract(d: dict) -> dict:
             "credits": int(m.get("total_credits_used") or 0),
             "runs": int(m.get("total_runs") or 0),
         }
-    return {
-        "credits": int(org_m.get("total_credits_used") or 0),
-        "runs": int(org_m.get("total_runs") or 0),
-        "projects": projects,
-    }
+    return {"credits": int(org_m.get("total_credits_used") or 0),
+            "runs": int(org_m.get("total_runs") or 0), "projects": projects}
 
 
 def project_visibility(projects: list) -> dict:
-    """Map project name -> private bool, via the GitHub API."""
     out = {}
     for name in projects:
         try:
-            r = gh(f"/repos/{GH_OWNER}/{name}")
-            out[name] = bool(r.get("private", False))
+            out[name] = bool(gh(f"/repos/{GH_OWNER}/{name}").get("private", False))
         except Exception as e:
-            print(f"WARN: visibility for {name} failed ({e}); assume public",
-                  file=sys.stderr)
+            print(f"WARN: visibility {name} ({e}); assume public", file=sys.stderr)
             out[name] = False
-        time.sleep(0.2)
+        time.sleep(0.4)
     return out
 
 
-def build_current(extracted: dict, vis: dict, windows: dict, now: dt.datetime) -> dict:
-    """Bucket the snapshot into OSS / private and emit widget-friendly json."""
-    oss_c = oss_r = priv_c = priv_r = 0
-    projects = []
-    for name, p in extracted["projects"].items():
-        is_private = vis.get(name, False)
-        if is_private:
-            priv_c += p["credits"]; priv_r += p["runs"]
-        else:
-            oss_c += p["credits"]; oss_r += p["runs"]
-        projects.append({
-            "name": name,
-            "credits": p["credits"],
-            "runs": p["runs"],
-            "private": is_private,
-        })
-    projects.sort(key=lambda x: x["credits"], reverse=True)
-    total = oss_c + priv_c
+def add_months(d: dt.date, months: int) -> dt.date:
+    m = d.month - 1 + months
+    y = d.year + m // 12
+    m = m % 12 + 1
+    return dt.date(y, m, min(d.day, calendar.monthrange(y, m)[1]))
+
+
+def cycle_info(today: dt.date, start_day: int) -> dict:
+    start = today.replace(day=start_day)
+    if start > today:
+        start = (start - dt.timedelta(days=1)).replace(day=start_day)
+    end = add_months(start, 1) - dt.timedelta(days=1)
+    length = (add_months(start, 1) - start).days
+    elapsed = (today - start).days
     return {
-        "generated_at": now.isoformat(),
-        "window": CURRENT_WINDOW,
-        "limits": dict(LIMITS),
-        "totals": {
-            "total_credits": total,
-            "total_runs": extracted["runs"],
-            "oss_credits": oss_c,
-            "private_credits": priv_c,
-        },
-        "oss": {
-            "credits": oss_c, "runs": oss_r, "limit": LIMITS["oss"],
-            "percent": round(100 * oss_c / LIMITS["oss"], 1) if LIMITS["oss"] else 0,
-        },
-        "private": {
-            "credits": priv_c, "runs": priv_r, "limit": LIMITS["private"],
-            "percent": round(100 * priv_c / LIMITS["private"], 1) if LIMITS["private"] else 0,
-        },
-        "windows": windows,
-        "projects": projects,
+        "start": start.isoformat(), "end": end.isoformat(),
+        "start_day": start_day, "length_days": length,
+        "elapsed_days": elapsed, "remaining_days": length - elapsed,
+        "fraction_elapsed": round(elapsed / length, 3),
     }
+
+
+def status(projected_pct: float) -> str:
+    if projected_pct >= 100:
+        return "exceed"
+    if projected_pct >= 80:
+        return "at-risk"
+    return "on-track"
+
+
+def bucket_stats(projects: dict, vis: dict, limits: dict, window_days: int,
+                 cycle: dict) -> dict:
+    credits_oss = credits_priv = runs_oss = runs_priv = 0
+    for name, p in projects.items():
+        if vis.get(name, False):
+            credits_priv += p["credits"]; runs_priv += p["runs"]
+        else:
+            credits_oss += p["credits"]; runs_oss += p["runs"]
+    out = {}
+    for key, (credits, runs, limit) in {
+            "oss": (credits_oss, runs_oss, limits["oss"]),
+            "private": (credits_priv, runs_priv, limits["private"])}.items():
+        daily = credits / window_days if window_days else 0
+        used_est = daily * cycle["elapsed_days"]
+        projected = daily * cycle["length_days"]
+        proj_pct = round(100 * projected / limit, 1) if limit else 0
+        days_to_runout = (limit / daily) if daily > 0 else None
+        out[key] = {
+            "limit": limit, "credits_window": credits, "runs": runs,
+            "daily_burn": round(daily, 1),
+            "used_so_far_est": round(used_est, 0),
+            "projected": round(projected, 0), "projected_pct": proj_pct,
+            "status": status(proj_pct),
+            "days_to_runout": round(days_to_runout) if days_to_runout else None,
+        }
+    return out
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="stats/current.json")
-    ap.add_argument("--history", default="stats/history.json")
     args = ap.parse_args()
 
     now = dt.datetime.now(dt.timezone.utc)
+    today = now.date()
 
-    # Multi-window trend strip (org-level credits+runs per named window).
-    windows = {}
-    for w in WINDOWS:
-        try:
-            e = extract(summary(w))
-            windows[w] = {"credits": e["credits"], "runs": e["runs"]}
-        except Exception as ex:
-            print(f"WARN: window {w} failed ({ex})", file=sys.stderr)
-            windows[w] = {"credits": 0, "runs": 0}
-        time.sleep(0.15)
-    print("windows:", {k: v["credits"] for k, v in windows.items()})
+    e7 = extract(summary("last-7-days")); time.sleep(0.6)
+    e30 = extract(summary("last-30-days")); time.sleep(0.6)
+    e24 = extract(summary("last-24-hours")); time.sleep(0.6)
+    e90 = extract(summary("last-90-days"))
 
-    # Current snapshot from the CURRENT_WINDOW preset.
-    e = extract(summary(CURRENT_WINDOW))
-    vis = project_visibility(list(e["projects"].keys()))
-    current = build_current(e, vis, windows, now)
+    vis = project_visibility(list(e7["projects"].keys()))
+
+    cyc = cycle_info(today, CYCLE_START_DAY)
+    buckets7 = bucket_stats(e7["projects"], vis, LIMITS, 7, cyc)
+    buckets30 = bucket_stats(e30["projects"], vis, LIMITS, 30, cyc)
+
+    # Per-project: use recent 7d burn to project end-of-cycle toward its bucket.
+    projects = []
+    for name, p in e7["projects"].items():
+        is_private = vis.get(name, False)
+        limit = LIMITS["private"] if is_private else LIMITS["oss"]
+        daily = p["credits"] / 7
+        proj = daily * cyc["length_days"]
+        projects.append({
+            "name": name, "private": is_private,
+            "recent7_credits": p["credits"], "recent7_runs": p["runs"],
+            "daily_burn": round(daily, 1),
+            "projected": round(proj, 0),
+            "projected_pct": round(100 * proj / limit, 1) if limit else 0,
+        })
+    projects.sort(key=lambda x: x["projected"], reverse=True)
+
+    current = {
+        "generated_at": now.isoformat(),
+        "limits": dict(LIMITS),
+        "cycle": cyc,
+        "rates": {
+            "recent7_daily": round(e7["credits"] / 7, 1),
+            "recent30_daily": round(e30["credits"] / 30, 1),
+            "recent7_org": e7["credits"], "recent30_org": e30["credits"],
+        },
+        "buckets": {
+            "oss": {**buckets7["oss"],
+                    "recent30_credits": buckets30["oss"]["credits_window"],
+                    "recent30_pct": round(100 * buckets30["oss"]["credits_window"] / LIMITS["oss"], 1)},
+            "private": {**buckets7["private"],
+                        "recent30_credits": buckets30["private"]["credits_window"],
+                        "recent30_pct": round(100 * buckets30["private"]["credits_window"] / LIMITS["private"], 1)},
+        },
+        "windows": {
+            "last-24-hours": {"credits": e24["credits"], "runs": e24["runs"]},
+            "last-7-days": {"credits": e7["credits"], "runs": e7["runs"]},
+            "last-30-days": {"credits": e30["credits"], "runs": e30["runs"]},
+            "last-90-days": {"credits": e90["credits"], "runs": e90["runs"]},
+        },
+        "projects": projects,
+    }
 
     os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w") as f:
         json.dump(current, f, indent=2, sort_keys=True)
-    # history.json retained as a stable {weeks:[]} shape for forward-compat
-    # (populated only if a token ever exposes granular weekly buckets).
-    try:
-        with open(args.history) as f:
-            history = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        history = {"weeks": []}
-    with open(args.history, "w") as f:
-        json.dump(history, f, indent=2, sort_keys=True)
-
-    print(f"wrote {args.out} + {args.history}: "
-          f"{CURRENT_WINDOW} total {current['totals']['total_credits']:,} credits")
+    print(f"cycle {cyc['start']}..{cyc['end']} ({cyc['length_days']}d, "
+          f"{cyc['elapsed_days']} elapsed)")
+    for b, s in current["buckets"].items():
+        print(f"  {b}: burn {s['daily_burn']}/d -> projected {s['projected']:,} "
+              f"({s['projected_pct']}% of {s['limit']:,}) = {s['status']}")
+    print(f"  wrote {args.out}")
 
 
 if __name__ == "__main__":
