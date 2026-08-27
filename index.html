@@ -27,8 +27,9 @@
   .badge.on-track { background: rgba(74,222,128,.18); color: #4ade80; }
   .badge.at-risk { background: rgba(245,158,11,.18); color: #f59e0b; }
   .badge.exceed { background: rgba(239,68,68,.18); color: #ef4444; }
-  .bar { height: 5px; background: rgba(148,163,184,.2); border-radius: 3px; margin-top: 4px; overflow: hidden; }
+  .bar { height: 5px; background: rgba(148,163,184,.2); border-radius: 3px; margin-top: 4px; overflow: hidden; position: relative; }
   .bar > div { height: 100%; border-radius: 3px; }
+  .bar-used { position: absolute; left: 0; top: 0; height: 100%; background: rgba(0,0,0,.38); }
 
   table { width: 100%; border-collapse: collapse; }
   th, td { text-align: right; padding: 2px 6px; font-variant-numeric: tabular-nums; }
@@ -52,7 +53,7 @@
 <script>
 const CURRENT = "./stats/current.json";
 function fmt(n) { return n == null ? "–" : Math.round(n).toLocaleString(); }
-function pct(v) { return v == null ? "–" : v + "%"; }
+function pct(v) { return v == null ? "–" : (Math.round(v * 10) / 10) + "%"; }
 function color(p) { return p >= 100 ? "#ef4444" : p >= 80 ? "#f59e0b" : "#4ade80"; }
 function badge(s) { const m = { "on-track": "on track", "at-risk": "at risk", "exceed": "will exceed" }; return '<span class="badge ' + s + '">' + (m[s] || s) + "</span>"; }
 function mday(iso) { const d = new Date(iso + "T00:00:00"); return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
@@ -71,12 +72,16 @@ async function load() {
       + " · " + c.remaining_days + " left</div>";
 
     const b = cur.buckets;
-    const card = (label, x) =>
-      '<div class="bucket"><div class="blabel">' + label + " · " + fmt(x.limit) + " limit</div>"
-      + '<div class="row1"><span class="bnum">' + fmt(x.projected) + "</span>" + badge(x.status) + "</div>"
-      + '<div class="bsub">projected use by cycle end · ' + pct(x.projected_pct) + " of limit</div>"
-      + '<div class="bar"><div style="width:' + Math.min(x.projected_pct || 0, 100) + "%;background:" + color(x.projected_pct) + '"></div></div>'
-      + '<div class="bsub">used so far ~' + fmt(x.used_so_far_est) + " (" + pct(x.limit ? (100 * x.used_so_far_est / x.limit) : 0) + " of limit)</div></div>";
+    const card = (label, x) => {
+      const proj = Math.min(x.projected_pct || 0, 100);
+      const used = Math.min(x.limit ? (100 * x.used_so_far_est / x.limit) : 0, 100);
+      return '<div class="bucket"><div class="blabel">' + label + " · " + fmt(x.limit) + " limit</div>"
+        + '<div class="row1"><span class="bnum">' + fmt(x.projected) + "</span>" + badge(x.status) + "</div>"
+        + '<div class="bsub">projected use by cycle end · ' + pct(x.projected_pct) + " of limit</div>"
+        + '<div class="bar"><div style="width:' + proj + "%;background:" + color(x.projected_pct) + '"></div>'
+        + '<div class="bar-used" style="width:' + used + '%"></div></div>'
+        + '<div class="bsub">used so far ~' + fmt(x.used_so_far_est) + " (" + pct(used) + " of limit)</div></div>";
+    };
     document.getElementById("buckets").innerHTML = card("OSS (public)", b.oss) + card("Private", b.private);
 
     const rows = cur.projects.slice().sort((a, z) => z.projected - a.projected);
