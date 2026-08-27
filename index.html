@@ -55,6 +55,7 @@ function fmt(n) { return n == null ? "–" : Math.round(n).toLocaleString(); }
 function pct(v) { return v == null ? "–" : v + "%"; }
 function color(p) { return p >= 100 ? "#ef4444" : p >= 80 ? "#f59e0b" : "#4ade80"; }
 function badge(s) { const m = { "on-track": "on track", "at-risk": "at risk", "exceed": "will exceed" }; return '<span class="badge ' + s + '">' + (m[s] || s) + "</span>"; }
+function mday(iso) { const d = new Date(iso + "T00:00:00"); return d.toLocaleDateString("en-US", { month: "short", day: "numeric" }); }
 
 async function load() {
   try {
@@ -66,7 +67,7 @@ async function load() {
 
     const c = cur.cycle;
     document.getElementById("cycle").innerHTML =
-      '<div class="sub">' + c.start + " → " + c.end + " · day " + (c.elapsed_days + 1) + " of " + c.length_days
+      '<div class="sub">' + mday(c.start) + " → " + mday(c.end) + " · day " + (c.elapsed_days + 1) + " of " + c.length_days
       + " · " + c.remaining_days + " left</div>";
 
     const b = cur.buckets;
