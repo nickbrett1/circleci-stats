@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CircleCI — credit usage</title>
+<style>
+  :root { color-scheme: light dark; }
+  html, body { background: #0f172a; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px 14px 6px; font-size: 12.5px; line-height: 1.35; color: #e2e8f0; }
+  @media (prefers-color-scheme: light) { html, body { background: #ffffff; } body { color: #1e293b; } }
+  h1 { font-size: 13px; margin: 0 0 2px; font-weight: 600; }
+  .meta { font-size: 10px; opacity: .55; margin-bottom: 8px; }
+
+  .buckets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px; }
+  @media (max-width: 320px) { .buckets { grid-template-columns: 1fr; } }
+  .bucket { border: 1px solid rgba(148,163,184,.25); border-radius: 6px; padding: 8px; }
+  .bucket .blabel { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .7; }
+  .bucket .bnum { font-size: 17px; font-weight: 700; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
+  .bucket .bsub { font-size: 10px; opacity: .6; }
+  .bar { height: 7px; background: rgba(148,163,184,.2); border-radius: 4px; margin-top: 7px; overflow: hidden; }
+  .bar > div { height: 100%; border-radius: 4px; transition: width .5s; }
+
+  .trend-title { font-size: 10px; text-transform: uppercase; letter-spacing: .05em; opacity: .6; margin: 6px 0 2px; }
+  .empty { font-size: 10px; opacity: .6; padding: 6px 0; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 6px; }
+  th, td { text-align: right; padding: 3px 8px; white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; }
+  th { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .65; border-bottom: 1px solid rgba(148,163,184,.35); }
+  td { border-bottom: 1px solid rgba(148,163,184,.12); font-variant-numeric: tabular-nums; }
+  tr.total td { border-top: 2px solid rgba(148,163,184,.45); border-bottom: none; font-weight: 700; }
+  .tag { font-size: 8px; padding: 1px 5px; border-radius: 8px; margin-left: 6px; vertical-align: middle; }
+  .tag.oss { background: rgba(74,222,128,.18); color: #4ade80; }
+  .tag.priv { background: rgba(96,165,250,.18); color: #60a5fa; }
+  @media (prefers-color-scheme: light) { .tag.oss { color: #16a34a; } .tag.priv { color: #2563eb; } }
+  .error { color: #f87171; padding: 8px; }
+</style>
+</head>
+<body>
+  <h1>CircleCI — credit usage</h1>
+  <div class="meta" id="meta"></div>
+  <div class="buckets" id="buckets"></div>
+  <div class="trend-title">Credits per week — all projects</div>
+  <div id="trend">Loading…</div>
+  <div id="content"></div>
+<script>
+const CURRENT = "./stats/current.json";
+const HISTORY = "./stats/history.json";
+
+function fmt(n) { return n.toLocaleString(); }
+
+// Colour shifts from green -> amber -> red as usage approaches/exceeds the limit.
+function barColor(percent) {
+  if (percent >= 100) return "#ef4444";
+  if (percent >= 75) return "#f59e0b";
+  return "#4ade80";
+}
+
+async function load() {
+  try {
+    const [cr, hr] = await Promise.all([
+      fetch(CURRENT, { cache: "no-store" }),
+      fetch(HISTORY, { cache: "no-store" }),
+    ]);
+    if (!cr.ok) throw new Error("stats HTTP " + cr.status);
+    const cur = await cr.json();
+    const hist = hr.ok ? await hr.json() : { weeks: [] };
+    renderBuckets(cur);
+    renderTrend(hist);
+    renderTable(cur);
+    renderMeta(cur);
+  } catch (e) {
+    document.getElementById("buckets").innerHTML =
+      '<div class="error">Failed to load stats: ' + e.message + "</div>";
+  }
+}
+
+function bucketCard(label, b) {
+  const pct = b.percent || 0;
+  return '<div class="bucket"><div class="blabel">' + label + "</div>"
+    + '<div class="bnum">' + fmt(b.credits) + "</div>"
+    + '<div class="bsub">of ' + fmt(b.limit) + " · " + pct + "% · " + fmt(b.runs) + " runs</div>"
+    + '<div class="bar"><div style="width:' + Math.min(pct, 100) + "%;background:" + barColor(pct) + '"></div></div></div>';
+}
+
+function renderBuckets(cur) {
+  const el = document.getElementById("buckets");
+  if (!cur || !cur.oss) { el.innerHTML = '<div class="empty">No data yet</div>'; return; }
+  el.innerHTML = bucketCard("OSS (public) — 400k", cur.oss)
+    + bucketCard("Private — 30k", cur.private);
+}
+
+function renderTrend(hist) {
+  const weeks = hist.weeks || [];
+  const series = weeks.map((w) => ({ week: w.week, credits: (w.org && w.org.credits) || 0 }));
+  const el = document.getElementById("trend");
+  if (series.length < 2) {
+    el.innerHTML = '<div class="empty">Not enough weekly data yet (collector ran in snapshot mode).</div>';
+    return;
+  }
+  const W = 320, H = 84, padL = 6, padR = 6, padT = 8, padB = 18;
+  const maxV = Math.max(1, ...series.map((s) => s.credits));
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const x = (i) => padL + (series.length === 1 ? plotW / 2 : (i * plotW) / (series.length - 1));
+  const y = (v) => padT + ((maxV - v) / maxV) * plotH;
+  const pts = series.map((s, i) => x(i).toFixed(1) + "," + y(s.credits).toFixed(1));
+  let area = "M" + pts[0];
+  for (let i = 1; i < pts.length; i++) area += " L" + pts[i];
+  area += " L" + x(series.length - 1).toFixed(1) + "," + (padT + plotH).toFixed(1)
+        + " L" + x(0).toFixed(1) + "," + (padT + plotH).toFixed(1) + " Z";
+  let circles = "", labels = "";
+  series.forEach((s, i) => {
+    const cx = x(i).toFixed(1), cy = y(s.credits).toFixed(1);
+    circles += '<circle cx="' + cx + '" cy="' + cy + '" r="2.4" fill="#60a5fa">'
+      + "<title>" + s.week + ": " + fmt(s.credits) + " credits</title></circle>";
+    if (i === 0 || i === series.length - 1 || i % 2 === 1) {
+      labels += '<text x="' + cx + '" y="' + (H - 5) + '" font-size="8" text-anchor="middle" opacity=".55">' + s.week.slice(5) + "</text>";
+    }
+  });
+  const svg = '<svg viewBox="0 0 ' + W + " " + H + '" style="width:100%;max-width:420px" preserveAspectRatio="xMidYMid meet">'
+    + '<path d="' + area + '" fill="rgba(96,165,250,.14)" stroke="none"/>'
+    + '<polyline points="' + pts.join(" ") + '" fill="none" stroke="#60a5fa" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>'
+    + circles + labels + "</svg>";
+  el.innerHTML = svg;
+}
+
+function renderTable(cur) {
+  const el = document.getElementById("content");
+  if (!cur || !cur.projects) { el.innerHTML = '<div class="empty">No data yet</div>'; return; }
+  let rows = cur.projects.slice();
+  rows.sort((a, b) => b.credits - a.credits);
+  let oss = 0, priv = 0;
+  for (const r of rows) { if (r.private) priv += r.credits; else oss += r.credits; }
+  const tag = (p) => p ? '<span class="tag priv">PRIVATE</span>' : '<span class="tag oss">OSS</span>';
+  let html = '<table><thead><tr><th>Project</th><th>Credits</th><th>Runs</th><th>% of bucket</th></tr></thead><tbody>';
+  for (const r of rows) {
+    const limit = r.private ? cur.private.limit : cur.oss.limit;
+    const pct = limit ? ((r.credits / limit) * 100).toFixed(1) : "0";
+    html += "<tr><td>" + r.name + tag(r.private) + "</td>"
+      + "<td>" + fmt(r.credits) + "</td>"
+      + "<td>" + fmt(r.runs) + "</td><td>" + pct + "%</td></tr>";
+  }
+  html += '<tr class="total"><td>OSS bucket</td><td>' + fmt(oss) + "</td><td></td><td></td></tr>";
+  html += '<tr class="total"><td>Private bucket</td><td>' + fmt(priv) + "</td><td></td><td></td></tr>";
+  html += "</tbody></table>";
+  el.innerHTML = html;
+}
+
+function renderMeta(cur) {
+  const el = document.getElementById("meta");
+  if (!cur) { el.textContent = "no data"; return; }
+  const gen = cur.generated_at ? new Date(cur.generated_at).toLocaleString() : "unknown";
+  el.textContent = "Window: " + (cur.window || "current") + " · Total " + fmt(cur.totals.total_credits)
+    + " credits · Updated " + gen + " — weekly by GitHub Actions";
+}
+
+load();
+</script>
+</body>
+</html>

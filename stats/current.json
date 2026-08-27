@@ -1,0 +1,76 @@
+{
+  "generated_at": "2026-08-27T11:17:49.725901+00:00",
+  "limits": {
+    "oss": 400000,
+    "private": 30000
+  },
+  "oss": {
+    "credits": 255601,
+    "limit": 400000,
+    "percent": 63.9,
+    "runs": 2317
+  },
+  "private": {
+    "credits": 0,
+    "limit": 30000,
+    "percent": 0.0,
+    "runs": 0
+  },
+  "projects": [
+    {
+      "credits": 172515,
+      "name": "ftn",
+      "private": false,
+      "runs": 1117
+    },
+    {
+      "credits": 26124,
+      "name": "mailroom",
+      "private": false,
+      "runs": 159
+    },
+    {
+      "credits": 19954,
+      "name": "agent-swarm",
+      "private": false,
+      "runs": 631
+    },
+    {
+      "credits": 17258,
+      "name": "pshelf",
+      "private": false,
+      "runs": 98
+    },
+    {
+      "credits": 9421,
+      "name": "dbt-duckdb",
+      "private": false,
+      "runs": 109
+    },
+    {
+      "credits": 7738,
+      "name": "stripe-toddler",
+      "private": false,
+      "runs": 136
+    },
+    {
+      "credits": 1693,
+      "name": "nas-port-mcp",
+      "private": false,
+      "runs": 47
+    },
+    {
+      "credits": 898,
+      "name": "parquet-peek",
+      "private": false,
+      "runs": 20
+    }
+  ],
+  "totals": {
+    "oss_credits": 255601,
+    "private_credits": 0,
+    "total_credits": 255601,
+    "total_runs": 2317
+  },
+  "window": "trailing-30-days"
+}
