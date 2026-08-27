@@ -174,17 +174,20 @@ def main():
     buckets7 = bucket_stats(e7["projects"], vis, LIMITS, 7, cyc)
     buckets30 = bucket_stats(e30["projects"], vis, LIMITS, 30, cyc)
 
-    # Per-project: use recent 7d burn to project end-of-cycle toward its bucket.
+    # Per-project: use recent 7d burn to project end-of-cycle toward its bucket,
+    # and estimate credits used so far this cycle (burn * days elapsed).
     projects = []
     for name, p in e7["projects"].items():
         is_private = vis.get(name, False)
         limit = LIMITS["private"] if is_private else LIMITS["oss"]
         daily = p["credits"] / 7
         proj = daily * cyc["length_days"]
+        used = daily * cyc["elapsed_days"]
         projects.append({
             "name": name, "private": is_private,
             "recent7_credits": p["credits"], "recent7_runs": p["runs"],
             "daily_burn": round(daily, 1),
+            "used_so_far": round(used, 0),
             "projected": round(proj, 0),
             "projected_pct": round(100 * proj / limit, 1) if limit else 0,
         })

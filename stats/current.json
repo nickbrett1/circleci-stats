@@ -36,7 +36,7 @@
     "start": "2026-08-23",
     "start_day": 23
   },
-  "generated_at": "2026-08-27T14:38:31.890151+00:00",
+  "generated_at": "2026-08-27T17:44:04.742540+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -49,7 +49,8 @@
       "projected": 76428.0,
       "projected_pct": 19.1,
       "recent7_credits": 17258,
-      "recent7_runs": 98
+      "recent7_runs": 98,
+      "used_so_far": 9862.0
     },
     {
       "daily_burn": 2209.0,
@@ -58,7 +59,8 @@
       "projected": 68479.0,
       "projected_pct": 17.1,
       "recent7_credits": 15463,
-      "recent7_runs": 84
+      "recent7_runs": 84,
+      "used_so_far": 8836.0
     },
     {
       "daily_burn": 517.1,
@@ -67,7 +69,8 @@
       "projected": 16031.0,
       "projected_pct": 4.0,
       "recent7_credits": 3620,
-      "recent7_runs": 86
+      "recent7_runs": 86,
+      "used_so_far": 2069.0
     },
     {
       "daily_burn": 103.4,
@@ -76,7 +79,8 @@
       "projected": 3206.0,
       "projected_pct": 0.8,
       "recent7_credits": 724,
-      "recent7_runs": 17
+      "recent7_runs": 17,
+      "used_so_far": 414.0
     },
     {
       "daily_burn": 73.9,
@@ -85,7 +89,8 @@
       "projected": 2290.0,
       "projected_pct": 0.6,
       "recent7_credits": 517,
-      "recent7_runs": 8
+      "recent7_runs": 8,
+      "used_so_far": 295.0
     },
     {
       "daily_burn": 60.9,
@@ -94,7 +99,8 @@
       "projected": 1887.0,
       "projected_pct": 0.5,
       "recent7_credits": 426,
-      "recent7_runs": 11
+      "recent7_runs": 11,
+      "used_so_far": 243.0
     },
     {
       "daily_burn": 29.1,
@@ -103,7 +109,8 @@
       "projected": 903.0,
       "projected_pct": 0.2,
       "recent7_credits": 204,
-      "recent7_runs": 2
+      "recent7_runs": 2,
+      "used_so_far": 117.0
     },
     {
       "daily_burn": 11.4,
@@ -112,7 +119,8 @@
       "projected": 354.0,
       "projected_pct": 0.1,
       "recent7_credits": 80,
-      "recent7_runs": 3
+      "recent7_runs": 3,
+      "used_so_far": 46.0
     }
   ],
   "rates": {
@@ -123,8 +131,8 @@
   },
   "windows": {
     "last-24-hours": {
-      "credits": 405,
-      "runs": 5
+      "credits": 180,
+      "runs": 2
     },
     "last-30-days": {
       "credits": 98766,

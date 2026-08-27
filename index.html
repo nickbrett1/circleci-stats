@@ -7,133 +7,89 @@
 <style>
   :root { color-scheme: light dark; }
   html, body { background: #0f172a; }
-  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 10px 14px 6px; font-size: 12.5px; line-height: 1.35; color: #e2e8f0; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; margin: 0; padding: 7px 10px 4px; font-size: 12px; line-height: 1.3; color: #e2e8f0; }
   @media (prefers-color-scheme: light) { html, body { background: #ffffff; } body { color: #1e293b; } }
-  h1 { font-size: 13px; margin: 0 0 2px; font-weight: 600; }
-  .meta { font-size: 10px; opacity: .55; margin-bottom: 8px; }
+  h1 { font-size: 12px; margin: 0; font-weight: 600; display: inline; }
+  .meta { font-size: 9.5px; opacity: .55; display: inline; margin-left: 6px; }
 
-  .cycle { margin-bottom: 8px; }
-  .cycle .lbl { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .7; }
-  .cycle .bar { height: 8px; background: rgba(148,163,184,.2); border-radius: 4px; overflow: hidden; margin: 3px 0; }
-  .cycle .bar > div { height: 100%; background: #60a5fa; border-radius: 4px; }
-  .cycle .sub { font-size: 10px; opacity: .7; }
+  .cycle { margin: 4px 0 6px; }
+  .cycle .bar { height: 6px; background: rgba(148,163,184,.2); border-radius: 3px; overflow: hidden; }
+  .cycle .bar > div { height: 100%; background: #60a5fa; border-radius: 3px; }
+  .cycle .sub { font-size: 9.5px; opacity: .7; margin-top: 2px; }
 
-  .buckets { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; }
-  @media (max-width: 320px) { .buckets { grid-template-columns: 1fr; } }
-  .bucket { border: 1px solid rgba(148,163,184,.25); border-radius: 6px; padding: 8px; }
-  .bucket .blabel { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .7; }
-  .bucket .bnum { font-size: 15px; font-weight: 700; margin: 2px 0 0; font-variant-numeric: tabular-nums; }
-  .bucket .bsub { font-size: 10px; opacity: .62; margin-top: 1px; }
-  .badge { display: inline-block; font-size: 8.5px; font-weight: 700; padding: 1px 6px; border-radius: 8px; text-transform: uppercase; letter-spacing: .04em; }
+  .buckets { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .bucket { border: 1px solid rgba(148,163,184,.22); border-radius: 5px; padding: 5px 7px; }
+  .bucket .blabel { font-size: 8px; text-transform: uppercase; letter-spacing: .04em; opacity: .7; }
+  .bucket .row1 { display: flex; align-items: baseline; justify-content: space-between; }
+  .bucket .bnum { font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .bucket .bsub { font-size: 8.5px; opacity: .6; margin-top: 1px; }
+  .badge { font-size: 7.5px; font-weight: 700; padding: 0 5px; border-radius: 7px; text-transform: uppercase; }
   .badge.on-track { background: rgba(74,222,128,.18); color: #4ade80; }
   .badge.at-risk { background: rgba(245,158,11,.18); color: #f59e0b; }
   .badge.exceed { background: rgba(239,68,68,.18); color: #ef4444; }
-  .bar { height: 7px; background: rgba(148,163,184,.2); border-radius: 4px; margin-top: 7px; overflow: hidden; }
-  .bar > div { height: 100%; border-radius: 4px; }
+  .bar { height: 5px; background: rgba(148,163,184,.2); border-radius: 3px; margin-top: 4px; overflow: hidden; }
+  .bar > div { height: 100%; border-radius: 3px; }
 
-  table { width: 100%; border-collapse: collapse; margin-top: 6px; }
-  th, td { text-align: right; padding: 3px 8px; white-space: nowrap; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: right; padding: 2px 6px; font-variant-numeric: tabular-nums; }
   th:first-child, td:first-child { text-align: left; }
-  th { font-size: 9px; text-transform: uppercase; letter-spacing: .05em; opacity: .65; border-bottom: 1px solid rgba(148,163,184,.35); }
-  td { border-bottom: 1px solid rgba(148,163,184,.12); font-variant-numeric: tabular-nums; }
-  .tag { font-size: 8px; padding: 1px 5px; border-radius: 8px; margin-left: 6px; vertical-align: middle; }
-  .tag.oss { background: rgba(74,222,128,.18); color: #4ade80; }
-  .tag.priv { background: rgba(96,165,250,.18); color: #60a5fa; }
+  th { font-size: 8px; text-transform: uppercase; letter-spacing: .04em; opacity: .6; border-bottom: 1px solid rgba(148,163,184,.3); }
+  td { border-bottom: 1px solid rgba(148,163,184,.1); font-size: 11px; }
+  tr:last-child td { border-bottom: none; }
+  .tag { font-size: 7px; padding: 0 4px; border-radius: 6px; margin-left: 4px; vertical-align: middle; }
+  .tag.oss { background: rgba(74,222,128,.16); color: #4ade80; }
+  .tag.priv { background: rgba(96,165,250,.16); color: #60a5fa; }
   @media (prefers-color-scheme: light) { .tag.oss { color: #16a34a; } .tag.priv { color: #2563eb; } }
   .error { color: #f87171; padding: 8px; }
 </style>
 </head>
 <body>
-  <h1>CircleCI — credit usage</h1>
-  <div class="meta" id="meta"></div>
+  <h1>CircleCI credits</h1><span class="meta" id="meta"></span>
   <div class="cycle" id="cycle"></div>
   <div class="buckets" id="buckets"></div>
-  <div id="content"></div>
+  <table id="table"><thead><tr><th>Project</th><th>Used this cycle</th><th>Proj. cycle</th><th>% limit</th></tr></thead><tbody id="tbody"></tbody></table>
 <script>
 const CURRENT = "./stats/current.json";
-
-function fmt(n) { return n.toLocaleString(); }
+function fmt(n) { return n == null ? "–" : Math.round(n).toLocaleString(); }
 function pct(v) { return v == null ? "–" : v + "%"; }
-
 function color(p) { return p >= 100 ? "#ef4444" : p >= 80 ? "#f59e0b" : "#4ade80"; }
-function badge(s) {
-  const m = { "on-track": "on track", "at-risk": "at risk", "exceed": "will exceed" };
-  return '<span class="badge ' + s + '">' + (m[s] || s) + "</span>";
-}
+function badge(s) { const m = { "on-track": "on track", "at-risk": "at risk", "exceed": "will exceed" }; return '<span class="badge ' + s + '">' + (m[s] || s) + "</span>"; }
 
 async function load() {
   try {
     const r = await fetch(CURRENT, { cache: "no-store" });
-    if (!r.ok) throw new Error("stats HTTP " + r.status);
+    if (!r.ok) throw new Error("HTTP " + r.status);
     const cur = await r.json();
-    renderMeta(cur);
-    renderCycle(cur);
-    renderBuckets(cur);
-    renderTable(cur);
+    const gen = cur.generated_at ? new Date(cur.generated_at).toLocaleString().replace(/:\d+ /, " ") : "?";
+    document.getElementById("meta").textContent = "updated " + gen;
+
+    const c = cur.cycle;
+    const elFrac = Math.round((c.fraction_elapsed || 0) * 100);
+    document.getElementById("cycle").innerHTML =
+      '<div class="bar"><div style="width:' + Math.min(elFrac, 100) + '%"></div></div>'
+      + '<div class="sub">' + c.start + " → " + c.end + " · day " + (c.elapsed_days + 1) + " of " + c.length_days
+      + " · " + c.remaining_days + " left</div>";
+
+    const b = cur.buckets;
+    const card = (label, x) =>
+      '<div class="bucket"><div class="blabel">' + label + "</div>"
+      + '<div class="row1"><span class="bnum">' + fmt(x.projected) + "</span>" + badge(x.status) + "</div>"
+      + '<div class="bsub">of ' + fmt(x.limit) + " · est. used " + fmt(x.used_so_far_est) + "</div>"
+      + '<div class="bar"><div style="width:' + Math.min(x.projected_pct || 0, 100) + "%;background:" + color(x.projected_pct) + '"></div></div></div>';
+    document.getElementById("buckets").innerHTML = card("OSS (public)", b.oss) + card("Private", b.private);
+
+    const rows = cur.projects.slice().sort((a, z) => z.projected - a.projected);
+    const tag = (p) => p ? '<span class="tag priv">P</span>' : '<span class="tag oss">O</span>';
+    const ccol = (pp) => pp >= 100 ? "#ef4444" : pp >= 80 ? "#f59e0b" : "";
+    document.getElementById("tbody").innerHTML = rows.map(r =>
+      "<tr><td>" + r.name + tag(r.private) + "</td>"
+      + "<td>" + fmt(r.used_so_far) + "</td>"
+      + "<td>" + fmt(r.projected) + "</td>"
+      + '<td style="color:' + ccol(r.projected_pct) + '">' + pct(r.projected_pct) + "</td></tr>").join("");
   } catch (e) {
-    document.getElementById("buckets").innerHTML =
-      '<div class="error">Failed to load stats: ' + e.message + "</div>";
+    document.getElementById("buckets").innerHTML = '<div class="error">Failed: ' + e.message + "</div>";
   }
 }
-
-function renderMeta(cur) {
-  const el = document.getElementById("meta");
-  if (!cur) { el.textContent = "no data"; return; }
-  const gen = cur.generated_at ? new Date(cur.generated_at).toLocaleString() : "unknown";
-  el.textContent = "Projected from recent burn · updated " + gen;
-}
-
-function renderCycle(cur) {
-  const el = document.getElementById("cycle");
-  if (!cur || !cur.cycle) { el.innerHTML = ""; return; }
-  const c = cur.cycle;
-  const elFrac = Math.round((c.fraction_elapsed || 0) * 100);
-  el.innerHTML =
-    '<div class="lbl">Cycle ' + c.start + " → " + c.end + "</div>"
-    + '<div class="bar"><div style="width:' + Math.min(elFrac, 100) + '%"></div></div>'
-    + '<div class="sub">Day ' + (c.elapsed_days + 1) + " of " + c.length_days
-    + " · " + c.remaining_days + " days left</div>";
-}
-
-function bucketCard(label, b) {
-  if (!b) return "";
-  const proj = b.projected || 0, p = b.projected_pct || 0;
-  const sub = "~" + fmt(b.used_so_far_est || 0) + " used so far · "
-    + (b.daily_burn || 0).toLocaleString() + "/day";
-  const c30 = b.recent30_pct != null ? " · past 30d: " + fmt(b.recent30_credits || 0) + " (" + pct(b.recent30_pct) + ")" : "";
-  return '<div class="bucket"><div class="blabel">' + label + ' &middot; ' + fmt(b.limit) + " limit</div>"
-    + '<div class="bnum">' + fmt(proj) + " <span style='font-size:10px;opacity:.6;font-weight:400'>est. by cycle end</span></div>"
-    + '<div class="bsub">' + sub + c30 + "</div>"
-    + '<div class="bar"><div style="width:' + Math.min(p, 100) + "%;background:" + color(p) + '"></div></div>'
-    + '<div class="bsub" style="margin-top:3px">' + badge(b.status) + " &middot; " + pct(p) + " of limit projected</div></div>";
-}
-
-function renderBuckets(cur) {
-  const el = document.getElementById("buckets");
-  if (!cur || !cur.buckets) { el.innerHTML = '<div class="empty">No data yet</div>'; return; }
-  el.innerHTML = bucketCard("OSS (public)", cur.buckets.oss)
-    + bucketCard("Private", cur.buckets.private);
-}
-
-function renderTable(cur) {
-  const el = document.getElementById("content");
-  if (!cur || !cur.projects) { el.innerHTML = ""; return; }
-  const rows = cur.projects.slice().sort((a, b) => b.projected - a.projected);
-  const tag = (p) => p ? '<span class="tag priv">PRIVATE</span>' : '<span class="tag oss">OSS</span>';
-  const cellColor = (pp) => pp >= 100 ? "#ef4444" : pp >= 80 ? "#f59e0b" : "";
-  let html = '<table><thead><tr><th>Project</th><th>7d credits</th><th>/day</th>'
-    + '<th>Proj. cycle</th><th>% limit</th></tr></thead><tbody>';
-  for (const r of rows) {
-    html += "<tr><td>" + r.name + tag(r.private) + "</td>"
-      + "<td>" + fmt(r.recent7_credits || 0) + "</td>"
-      + "<td>" + fmt(r.daily_burn || 0) + "</td>"
-      + "<td>" + fmt(r.projected || 0) + "</td>"
-      + '<td style="color:' + cellColor(r.projected_pct) + '">' + pct(r.projected_pct) + "</td></tr>";
-  }
-  html += "</tbody></table>";
-  el.innerHTML = html;
-}
-
 load();
 </script>
 </body>
