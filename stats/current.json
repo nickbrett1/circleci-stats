@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 38292,
-      "daily_burn": 5470.3,
-      "days_to_runout": 73,
+      "credits_window": 34283,
+      "daily_burn": 4897.6,
+      "days_to_runout": 82,
       "limit": 400000,
-      "projected": 169579.0,
-      "projected_pct": 42.4,
-      "recent30_credits": 98766,
-      "recent30_pct": 24.7,
-      "runs": 309,
+      "projected": 151825.0,
+      "projected_pct": 38.0,
+      "recent30_credits": 96329,
+      "recent30_pct": 24.1,
+      "runs": 292,
       "status": "on-track",
-      "used_so_far_est": 21881.0
+      "used_so_far_est": 24488.0
     },
     "private": {
       "credits_window": 0,
@@ -28,15 +28,15 @@
     }
   },
   "cycle": {
-    "elapsed_days": 4,
+    "elapsed_days": 5,
     "end": "2026-09-22",
-    "fraction_elapsed": 0.129,
+    "fraction_elapsed": 0.161,
     "length_days": 31,
-    "remaining_days": 27,
+    "remaining_days": 26,
     "start": "2026-08-23",
     "start_day": 23
   },
-  "generated_at": "2026-08-27T19:16:27.855819+00:00",
+  "generated_at": "2026-08-28T13:53:36.297371+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -50,27 +50,27 @@
       "projected_pct": 19.1,
       "recent7_credits": 17258,
       "recent7_runs": 98,
-      "used_so_far": 9862.0
+      "used_so_far": 12327.0
     },
     {
-      "daily_burn": 2209.0,
+      "daily_burn": 1661.9,
       "name": "mailroom",
       "private": false,
-      "projected": 68479.0,
-      "projected_pct": 17.1,
-      "recent7_credits": 15463,
-      "recent7_runs": 84,
-      "used_so_far": 8836.0
+      "projected": 51518.0,
+      "projected_pct": 12.9,
+      "recent7_credits": 11633,
+      "recent7_runs": 61,
+      "used_so_far": 8309.0
     },
     {
-      "daily_burn": 517.1,
+      "daily_burn": 502.0,
       "name": "ftn",
       "private": false,
-      "projected": 16031.0,
-      "projected_pct": 4.0,
-      "recent7_credits": 3620,
-      "recent7_runs": 86,
-      "used_so_far": 2069.0
+      "projected": 15562.0,
+      "projected_pct": 3.9,
+      "recent7_credits": 3514,
+      "recent7_runs": 93,
+      "used_so_far": 2510.0
     },
     {
       "daily_burn": 103.4,
@@ -80,7 +80,7 @@
       "projected_pct": 0.8,
       "recent7_credits": 724,
       "recent7_runs": 17,
-      "used_so_far": 414.0
+      "used_so_far": 517.0
     },
     {
       "daily_burn": 73.9,
@@ -90,17 +90,17 @@
       "projected_pct": 0.6,
       "recent7_credits": 517,
       "recent7_runs": 8,
-      "used_so_far": 295.0
+      "used_so_far": 369.0
     },
     {
-      "daily_burn": 60.9,
+      "daily_burn": 50.4,
       "name": "parquet-peek",
       "private": false,
-      "projected": 1887.0,
-      "projected_pct": 0.5,
-      "recent7_credits": 426,
-      "recent7_runs": 11,
-      "used_so_far": 243.0
+      "projected": 1563.0,
+      "projected_pct": 0.4,
+      "recent7_credits": 353,
+      "recent7_runs": 10,
+      "used_so_far": 252.0
     },
     {
       "daily_burn": 29.1,
@@ -110,7 +110,7 @@
       "projected_pct": 0.2,
       "recent7_credits": 204,
       "recent7_runs": 2,
-      "used_so_far": 117.0
+      "used_so_far": 146.0
     },
     {
       "daily_burn": 11.4,
@@ -120,31 +120,31 @@
       "projected_pct": 0.1,
       "recent7_credits": 80,
       "recent7_runs": 3,
-      "used_so_far": 46.0
+      "used_so_far": 57.0
     }
   ],
   "rates": {
-    "recent30_daily": 3292.2,
-    "recent30_org": 98766,
-    "recent7_daily": 5470.3,
-    "recent7_org": 38292
+    "recent30_daily": 3211.0,
+    "recent30_org": 96329,
+    "recent7_daily": 4897.6,
+    "recent7_org": 34283
   },
   "windows": {
     "last-24-hours": {
-      "credits": 0,
-      "runs": 0
+      "credits": 293,
+      "runs": 12
     },
     "last-30-days": {
-      "credits": 98766,
-      "runs": 841
+      "credits": 96329,
+      "runs": 824
     },
     "last-7-days": {
-      "credits": 38292,
-      "runs": 309
+      "credits": 34283,
+      "runs": 292
     },
     "last-90-days": {
-      "credits": 255601,
-      "runs": 2317
+      "credits": 255660,
+      "runs": 2325
     }
   }
 }
