@@ -63,7 +63,7 @@ async function load() {
     const r = await fetch(CURRENT, { cache: "no-store" });
     if (!r.ok) throw new Error("HTTP " + r.status);
     const cur = await r.json();
-    const gen = cur.generated_at ? new Date(cur.generated_at).toLocaleString().replace(/:\d+ /, " ") : "?";
+    const gen = cur.generated_at ? new Date(cur.generated_at).toLocaleString("en-US", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }) : "?";
     document.getElementById("meta").textContent = "updated " + gen;
 
     const c = cur.cycle;
