@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 25434,
-      "daily_burn": 3633.4,
-      "days_to_runout": 110,
+      "credits_window": 25915,
+      "daily_burn": 3702.1,
+      "days_to_runout": 108,
       "limit": 400000,
-      "projected": 112636.0,
-      "projected_pct": 28.2,
-      "recent30_credits": 93686,
-      "recent30_pct": 23.4,
-      "runs": 226,
+      "projected": 114766.0,
+      "projected_pct": 28.7,
+      "recent30_credits": 94167,
+      "recent30_pct": 23.5,
+      "runs": 242,
       "status": "on-track",
-      "used_so_far_est": 21801.0
+      "used_so_far_est": 22213.0
     },
     "private": {
       "credits_window": 0,
@@ -36,7 +36,7 @@
     "start": "2026-08-23",
     "start_day": 23
   },
-  "generated_at": "2026-08-29T01:11:13.847481+00:00",
+  "generated_at": "2026-08-29T11:47:24.769585+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -53,24 +53,24 @@
       "used_so_far": 9186.0
     },
     {
-      "daily_burn": 1453.9,
+      "daily_burn": 1487.3,
       "name": "pshelf",
       "private": false,
-      "projected": 45070.0,
-      "projected_pct": 11.3,
-      "recent7_credits": 10177,
-      "recent7_runs": 54,
-      "used_so_far": 8723.0
+      "projected": 46106.0,
+      "projected_pct": 11.5,
+      "recent7_credits": 10411,
+      "recent7_runs": 58,
+      "used_so_far": 8924.0
     },
     {
-      "daily_burn": 380.3,
+      "daily_burn": 415.6,
       "name": "ftn",
       "private": false,
-      "projected": 11789.0,
-      "projected_pct": 2.9,
-      "recent7_credits": 2662,
-      "recent7_runs": 75,
-      "used_so_far": 2282.0
+      "projected": 12883.0,
+      "projected_pct": 3.2,
+      "recent7_credits": 2909,
+      "recent7_runs": 87,
+      "used_so_far": 2493.0
     },
     {
       "daily_burn": 103.4,
@@ -124,27 +124,27 @@
     }
   ],
   "rates": {
-    "recent30_daily": 3122.9,
-    "recent30_org": 93686,
-    "recent7_daily": 3633.4,
-    "recent7_org": 25434
+    "recent30_daily": 3138.9,
+    "recent30_org": 94167,
+    "recent7_daily": 3702.1,
+    "recent7_org": 25915
   },
   "windows": {
     "last-24-hours": {
-      "credits": 481,
-      "runs": 16
+      "credits": 675,
+      "runs": 24
     },
     "last-30-days": {
-      "credits": 93686,
-      "runs": 789
+      "credits": 94167,
+      "runs": 805
     },
     "last-7-days": {
-      "credits": 25434,
-      "runs": 226
+      "credits": 25915,
+      "runs": 242
     },
     "last-90-days": {
-      "credits": 252661,
-      "runs": 2305
+      "credits": 253142,
+      "runs": 2321
     }
   }
 }
