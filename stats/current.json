@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 25915,
-      "daily_burn": 3702.1,
-      "days_to_runout": 108,
+      "credits_window": 22431,
+      "daily_burn": 3204.4,
+      "days_to_runout": 125,
       "limit": 400000,
-      "projected": 114766.0,
-      "projected_pct": 28.7,
-      "recent30_credits": 94167,
-      "recent30_pct": 23.5,
+      "projected": 99337.0,
+      "projected_pct": 24.8,
+      "recent30_credits": 96372,
+      "recent30_pct": 24.1,
       "runs": 242,
       "status": "on-track",
-      "used_so_far_est": 22213.0
+      "used_so_far_est": 22431.0
     },
     "private": {
       "credits_window": 0,
@@ -28,59 +28,59 @@
     }
   },
   "cycle": {
-    "elapsed_days": 6,
+    "elapsed_days": 7,
     "end": "2026-09-22",
-    "fraction_elapsed": 0.194,
+    "fraction_elapsed": 0.226,
     "length_days": 31,
-    "remaining_days": 25,
+    "remaining_days": 24,
     "start": "2026-08-23",
     "start_day": 23
   },
-  "generated_at": "2026-08-29T19:59:13.825684+00:00",
+  "generated_at": "2026-08-30T10:41:34.857912+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [
     {
-      "daily_burn": 1531.0,
+      "daily_burn": 1362.0,
       "name": "mailroom",
       "private": false,
-      "projected": 47461.0,
-      "projected_pct": 11.9,
-      "recent7_credits": 10717,
-      "recent7_runs": 57,
-      "used_so_far": 9186.0
+      "projected": 42222.0,
+      "projected_pct": 10.6,
+      "recent7_credits": 9534,
+      "recent7_runs": 52,
+      "used_so_far": 9534.0
     },
     {
-      "daily_burn": 1487.3,
+      "daily_burn": 824.1,
       "name": "pshelf",
       "private": false,
-      "projected": 46106.0,
-      "projected_pct": 11.5,
-      "recent7_credits": 10411,
-      "recent7_runs": 58,
-      "used_so_far": 8924.0
+      "projected": 25548.0,
+      "projected_pct": 6.4,
+      "recent7_credits": 5769,
+      "recent7_runs": 36,
+      "used_so_far": 5769.0
     },
     {
-      "daily_burn": 415.6,
+      "daily_burn": 527.6,
       "name": "ftn",
       "private": false,
-      "projected": 12883.0,
-      "projected_pct": 3.2,
-      "recent7_credits": 2909,
-      "recent7_runs": 87,
-      "used_so_far": 2493.0
+      "projected": 16355.0,
+      "projected_pct": 4.1,
+      "recent7_credits": 3693,
+      "recent7_runs": 98,
+      "used_so_far": 3693.0
     },
     {
-      "daily_burn": 103.4,
-      "name": "agent-swarm",
+      "daily_burn": 256.7,
+      "name": "gaggle",
       "private": false,
-      "projected": 3206.0,
-      "projected_pct": 0.8,
-      "recent7_credits": 724,
-      "recent7_runs": 17,
-      "used_so_far": 621.0
+      "projected": 7958.0,
+      "projected_pct": 2.0,
+      "recent7_credits": 1797,
+      "recent7_runs": 20,
+      "used_so_far": 1797.0
     },
     {
       "daily_burn": 73.9,
@@ -90,7 +90,17 @@
       "projected_pct": 0.6,
       "recent7_credits": 517,
       "recent7_runs": 8,
-      "used_so_far": 443.0
+      "used_so_far": 517.0
+    },
+    {
+      "daily_burn": 69.1,
+      "name": "agent-swarm",
+      "private": false,
+      "projected": 2143.0,
+      "projected_pct": 0.5,
+      "recent7_credits": 484,
+      "recent7_runs": 13,
+      "used_so_far": 484.0
     },
     {
       "daily_burn": 50.4,
@@ -100,7 +110,7 @@
       "projected_pct": 0.4,
       "recent7_credits": 353,
       "recent7_runs": 10,
-      "used_so_far": 303.0
+      "used_so_far": 353.0
     },
     {
       "daily_burn": 29.1,
@@ -110,7 +120,7 @@
       "projected_pct": 0.2,
       "recent7_credits": 204,
       "recent7_runs": 2,
-      "used_so_far": 175.0
+      "used_so_far": 204.0
     },
     {
       "daily_burn": 11.4,
@@ -120,31 +130,31 @@
       "projected_pct": 0.1,
       "recent7_credits": 80,
       "recent7_runs": 3,
-      "used_so_far": 69.0
+      "used_so_far": 80.0
     }
   ],
   "rates": {
-    "recent30_daily": 3138.9,
-    "recent30_org": 94167,
-    "recent7_daily": 3702.1,
-    "recent7_org": 25915
+    "recent30_daily": 3212.4,
+    "recent30_org": 96372,
+    "recent7_daily": 3204.4,
+    "recent7_org": 22431
   },
   "windows": {
     "last-24-hours": {
-      "credits": 3454,
-      "runs": 56
+      "credits": 3004,
+      "runs": 34
     },
     "last-30-days": {
-      "credits": 94167,
-      "runs": 805
+      "credits": 96372,
+      "runs": 828
     },
     "last-7-days": {
-      "credits": 25915,
+      "credits": 22431,
       "runs": 242
     },
     "last-90-days": {
-      "credits": 253142,
-      "runs": 2321
+      "credits": 254181,
+      "runs": 2352
     }
   }
 }
