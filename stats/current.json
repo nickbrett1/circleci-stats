@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 22431,
-      "daily_burn": 3204.4,
-      "days_to_runout": 125,
+      "credits_window": 22267,
+      "daily_burn": 3181.0,
+      "days_to_runout": 126,
       "limit": 400000,
-      "projected": 99337.0,
-      "projected_pct": 24.8,
-      "recent30_credits": 96372,
-      "recent30_pct": 24.1,
+      "projected": 98611.0,
+      "projected_pct": 24.7,
+      "recent30_credits": 104683,
+      "recent30_pct": 26.2,
       "runs": 242,
       "status": "on-track",
-      "used_so_far_est": 22431.0
+      "used_so_far_est": 25448.0
     },
     "private": {
       "credits_window": 0,
@@ -28,133 +28,143 @@
     }
   },
   "cycle": {
-    "elapsed_days": 7,
+    "elapsed_days": 8,
     "end": "2026-09-22",
-    "fraction_elapsed": 0.226,
+    "fraction_elapsed": 0.258,
     "length_days": 31,
-    "remaining_days": 24,
+    "remaining_days": 23,
     "start": "2026-08-23",
     "start_day": 23
   },
-  "generated_at": "2026-08-30T20:02:47.214322+00:00",
+  "generated_at": "2026-08-31T11:51:07.307038+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [
     {
-      "daily_burn": 1362.0,
+      "daily_burn": 1055.3,
       "name": "mailroom",
       "private": false,
-      "projected": 42222.0,
-      "projected_pct": 10.6,
-      "recent7_credits": 9534,
-      "recent7_runs": 52,
-      "used_so_far": 9534.0
+      "projected": 32714.0,
+      "projected_pct": 8.2,
+      "recent7_credits": 7387,
+      "recent7_runs": 38,
+      "used_so_far": 8442.0
     },
     {
-      "daily_burn": 824.1,
+      "daily_burn": 675.4,
       "name": "pshelf",
       "private": false,
-      "projected": 25548.0,
-      "projected_pct": 6.4,
-      "recent7_credits": 5769,
-      "recent7_runs": 36,
-      "used_so_far": 5769.0
+      "projected": 20938.0,
+      "projected_pct": 5.2,
+      "recent7_credits": 4728,
+      "recent7_runs": 30,
+      "used_so_far": 5403.0
     },
     {
-      "daily_burn": 527.6,
-      "name": "ftn",
-      "private": false,
-      "projected": 16355.0,
-      "projected_pct": 4.1,
-      "recent7_credits": 3693,
-      "recent7_runs": 98,
-      "used_so_far": 3693.0
-    },
-    {
-      "daily_burn": 256.7,
+      "daily_burn": 508.1,
       "name": "gaggle",
       "private": false,
-      "projected": 7958.0,
-      "projected_pct": 2.0,
-      "recent7_credits": 1797,
-      "recent7_runs": 20,
-      "used_so_far": 1797.0
+      "projected": 15752.0,
+      "projected_pct": 3.9,
+      "recent7_credits": 3557,
+      "recent7_runs": 29,
+      "used_so_far": 4065.0
     },
     {
-      "daily_burn": 73.9,
-      "name": "nas-port-mcp",
+      "daily_burn": 450.3,
+      "name": "ftn",
       "private": false,
-      "projected": 2290.0,
-      "projected_pct": 0.6,
-      "recent7_credits": 517,
-      "recent7_runs": 8,
-      "used_so_far": 517.0
+      "projected": 13959.0,
+      "projected_pct": 3.5,
+      "recent7_credits": 3152,
+      "recent7_runs": 88,
+      "used_so_far": 3602.0
     },
     {
-      "daily_burn": 69.1,
-      "name": "agent-swarm",
+      "daily_burn": 160.4,
+      "name": "deepseek-balance",
       "private": false,
-      "projected": 2143.0,
-      "projected_pct": 0.5,
-      "recent7_credits": 484,
-      "recent7_runs": 13,
-      "used_so_far": 484.0
+      "projected": 4973.0,
+      "projected_pct": 1.2,
+      "recent7_credits": 1123,
+      "recent7_runs": 12,
+      "used_so_far": 1283.0
     },
     {
-      "daily_burn": 50.4,
+      "daily_burn": 127.1,
       "name": "parquet-peek",
       "private": false,
-      "projected": 1563.0,
-      "projected_pct": 0.4,
-      "recent7_credits": 353,
-      "recent7_runs": 10,
-      "used_so_far": 353.0
+      "projected": 3941.0,
+      "projected_pct": 1.0,
+      "recent7_credits": 890,
+      "recent7_runs": 17,
+      "used_so_far": 1017.0
     },
     {
-      "daily_burn": 29.1,
-      "name": "dbt-duckdb",
+      "daily_burn": 110.3,
+      "name": "nas-port-mcp",
       "private": false,
-      "projected": 903.0,
-      "projected_pct": 0.2,
-      "recent7_credits": 204,
-      "recent7_runs": 2,
-      "used_so_far": 204.0
+      "projected": 3419.0,
+      "projected_pct": 0.9,
+      "recent7_credits": 772,
+      "recent7_runs": 11,
+      "used_so_far": 882.0
     },
     {
-      "daily_burn": 11.4,
+      "daily_burn": 61.1,
+      "name": "agent-swarm",
+      "private": false,
+      "projected": 1895.0,
+      "projected_pct": 0.5,
+      "recent7_credits": 428,
+      "recent7_runs": 12,
+      "used_so_far": 489.0
+    },
+    {
+      "daily_burn": 17.0,
       "name": "stripe-toddler",
       "private": false,
-      "projected": 354.0,
+      "projected": 527.0,
       "projected_pct": 0.1,
-      "recent7_credits": 80,
-      "recent7_runs": 3,
-      "used_so_far": 80.0
+      "recent7_credits": 119,
+      "recent7_runs": 4,
+      "used_so_far": 136.0
+    },
+    {
+      "daily_burn": 15.9,
+      "name": "dbt-duckdb",
+      "private": false,
+      "projected": 492.0,
+      "projected_pct": 0.1,
+      "recent7_credits": 111,
+      "recent7_runs": 1,
+      "used_so_far": 127.0
     }
   ],
   "rates": {
-    "recent30_daily": 3212.4,
-    "recent30_org": 96372,
-    "recent7_daily": 3204.4,
-    "recent7_org": 22431
+    "recent30_daily": 3489.4,
+    "recent30_org": 104683,
+    "recent7_daily": 3181.0,
+    "recent7_org": 22267
   },
   "windows": {
     "last-24-hours": {
-      "credits": 1117,
-      "runs": 10
+      "credits": 9109,
+      "runs": 67
     },
     "last-30-days": {
-      "credits": 96372,
-      "runs": 828
+      "credits": 104683,
+      "runs": 891
     },
     "last-7-days": {
-      "credits": 22431,
+      "credits": 22267,
       "runs": 242
     },
     "last-90-days": {
-      "credits": 254181,
-      "runs": 2352
+      "credits": 262843,
+      "runs": 2417
     }
   }
 }
