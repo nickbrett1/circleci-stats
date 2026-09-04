@@ -36,7 +36,7 @@
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-04T10:00:07.828015+00:00",
+  "generated_at": "2026-09-04T14:01:56.149195+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -151,8 +151,8 @@
   },
   "windows": {
     "last-24-hours": {
-      "credits": 14168,
-      "runs": 133
+      "credits": 9973,
+      "runs": 87
     },
     "last-30-days": {
       "credits": 111663,
