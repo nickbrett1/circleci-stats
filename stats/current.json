@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 31740,
-      "daily_burn": 4534.3,
-      "days_to_runout": 88,
+      "credits_window": 36559,
+      "daily_burn": 5222.7,
+      "days_to_runout": 77,
       "limit": 400000,
-      "projected": 136029.0,
-      "projected_pct": 34.0,
-      "recent30_credits": 108193,
-      "recent30_pct": 27.0,
-      "runs": 331,
+      "projected": 156681.0,
+      "projected_pct": 39.2,
+      "recent30_credits": 113012,
+      "recent30_pct": 28.3,
+      "runs": 380,
       "status": "on-track",
-      "used_so_far_est": -81617.0
+      "used_so_far_est": -94009.0
     },
     "private": {
       "credits_window": 0,
@@ -36,21 +36,21 @@
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-05T01:29:15.347236+00:00",
+  "generated_at": "2026-09-05T06:21:25.901575+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [
     {
-      "daily_burn": 1968.4,
+      "daily_burn": 2401.4,
       "name": "ftn",
       "private": false,
-      "projected": 59053.0,
-      "projected_pct": 14.8,
-      "recent7_credits": 13779,
-      "recent7_runs": 196,
-      "used_so_far": -35432.0
+      "projected": 72043.0,
+      "projected_pct": 18.0,
+      "recent7_credits": 16810,
+      "recent7_runs": 228,
+      "used_so_far": -43226.0
     },
     {
       "daily_burn": 778.6,
@@ -73,14 +73,14 @@
       "used_so_far": -12644.0
     },
     {
-      "daily_burn": 510.3,
+      "daily_burn": 577.4,
       "name": "mailroom",
       "private": false,
-      "projected": 15309.0,
-      "projected_pct": 3.8,
-      "recent7_credits": 3572,
-      "recent7_runs": 17,
-      "used_so_far": -9185.0
+      "projected": 17323.0,
+      "projected_pct": 4.3,
+      "recent7_credits": 4042,
+      "recent7_runs": 20,
+      "used_so_far": -10394.0
     },
     {
       "daily_burn": 310.6,
@@ -113,6 +113,16 @@
       "used_so_far": -1286.0
     },
     {
+      "daily_burn": 67.3,
+      "name": "circleci-mcp",
+      "private": false,
+      "projected": 2019.0,
+      "projected_pct": 0.5,
+      "recent7_credits": 471,
+      "recent7_runs": 10,
+      "used_so_far": -1211.0
+    },
+    {
       "daily_burn": 61.1,
       "name": "agent-swarm",
       "private": false,
@@ -121,6 +131,36 @@
       "recent7_credits": 428,
       "recent7_runs": 12,
       "used_so_far": -1101.0
+    },
+    {
+      "daily_burn": 59.7,
+      "name": "vikunja-mcp",
+      "private": false,
+      "projected": 1791.0,
+      "projected_pct": 0.4,
+      "recent7_credits": 418,
+      "recent7_runs": 2,
+      "used_so_far": -1075.0
+    },
+    {
+      "daily_burn": 31.3,
+      "name": "dagu-mcp",
+      "private": false,
+      "projected": 939.0,
+      "projected_pct": 0.2,
+      "recent7_credits": 219,
+      "recent7_runs": 1,
+      "used_so_far": -563.0
+    },
+    {
+      "daily_burn": 30.0,
+      "name": "miniflux-feed-dedup",
+      "private": false,
+      "projected": 900.0,
+      "projected_pct": 0.2,
+      "recent7_credits": 210,
+      "recent7_runs": 1,
+      "used_so_far": -540.0
     },
     {
       "daily_burn": 16.0,
@@ -144,27 +184,27 @@
     }
   ],
   "rates": {
-    "recent30_daily": 3606.4,
-    "recent30_org": 108193,
-    "recent7_daily": 4534.3,
-    "recent7_org": 31740
+    "recent30_daily": 3767.1,
+    "recent30_org": 113012,
+    "recent7_daily": 5222.7,
+    "recent7_org": 36559
   },
   "windows": {
     "last-24-hours": {
-      "credits": 2971,
-      "runs": 31
+      "credits": 6294,
+      "runs": 36
     },
     "last-30-days": {
-      "credits": 108193,
-      "runs": 989
+      "credits": 113012,
+      "runs": 1038
     },
     "last-7-days": {
-      "credits": 31740,
-      "runs": 331
+      "credits": 36559,
+      "runs": 380
     },
     "last-90-days": {
-      "credits": 265351,
-      "runs": 2494
+      "credits": 270170,
+      "runs": 2543
     }
   }
 }
