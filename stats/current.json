@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 33352,
-      "daily_burn": 4764.6,
-      "days_to_runout": 84,
+      "credits_window": 37587,
+      "daily_burn": 5369.6,
+      "days_to_runout": 74,
       "limit": 400000,
-      "projected": 142937.0,
-      "projected_pct": 35.7,
-      "recent30_credits": 109173,
-      "recent30_pct": 27.3,
-      "runs": 336,
+      "projected": 161087.0,
+      "projected_pct": 40.3,
+      "recent30_credits": 113408,
+      "recent30_pct": 28.4,
+      "runs": 349,
       "status": "on-track",
-      "used_so_far_est": -80998.0
+      "used_so_far_est": -91283.0
     },
     "private": {
       "credits_window": 0,
@@ -36,21 +36,21 @@
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-06T00:16:54.178119+00:00",
+  "generated_at": "2026-09-06T05:11:01.025108+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [
     {
-      "daily_burn": 2261.1,
+      "daily_burn": 2305.0,
       "name": "ftn",
       "private": false,
-      "projected": 67834.0,
-      "projected_pct": 17.0,
-      "recent7_credits": 15828,
-      "recent7_runs": 216,
-      "used_so_far": -38439.0
+      "projected": 69150.0,
+      "projected_pct": 17.3,
+      "recent7_credits": 16135,
+      "recent7_runs": 220,
+      "used_so_far": -39185.0
     },
     {
       "daily_burn": 778.6,
@@ -71,6 +71,16 @@
       "recent7_credits": 4042,
       "recent7_runs": 20,
       "used_so_far": -9816.0
+    },
+    {
+      "daily_burn": 561.1,
+      "name": "agent-swarm",
+      "private": false,
+      "projected": 16834.0,
+      "projected_pct": 4.2,
+      "recent7_credits": 3928,
+      "recent7_runs": 9,
+      "used_so_far": -9539.0
     },
     {
       "daily_burn": 445.7,
@@ -164,16 +174,6 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "agent-swarm",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
       "name": "dbt-duckdb",
       "private": false,
       "projected": 0.0,
@@ -184,27 +184,27 @@
     }
   ],
   "rates": {
-    "recent30_daily": 3639.1,
-    "recent30_org": 109173,
-    "recent7_daily": 4764.6,
-    "recent7_org": 33352
+    "recent30_daily": 3780.3,
+    "recent30_org": 113408,
+    "recent7_daily": 5369.6,
+    "recent7_org": 37587
   },
   "windows": {
     "last-24-hours": {
-      "credits": 4235,
-      "runs": 13
+      "credits": 0,
+      "runs": 0
     },
     "last-30-days": {
-      "credits": 109173,
-      "runs": 1009
+      "credits": 113408,
+      "runs": 1022
     },
     "last-7-days": {
-      "credits": 33352,
-      "runs": 336
+      "credits": 37587,
+      "runs": 349
     },
     "last-90-days": {
-      "credits": 266361,
-      "runs": 2500
+      "credits": 270596,
+      "runs": 2513
     }
   }
 }
