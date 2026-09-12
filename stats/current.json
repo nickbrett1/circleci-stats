@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 21519,
-      "daily_burn": 3074.1,
-      "days_to_runout": 130,
+      "credits_window": 16700,
+      "daily_burn": 2385.7,
+      "days_to_runout": 168,
       "limit": 400000,
-      "projected": 92224.0,
-      "projected_pct": 23.1,
-      "recent30_credits": 115258,
-      "recent30_pct": 28.8,
-      "runs": 207,
+      "projected": 71571.0,
+      "projected_pct": 17.9,
+      "recent30_credits": 112267,
+      "recent30_pct": 28.1,
+      "runs": 158,
       "status": "on-track",
-      "used_so_far_est": -36890.0
+      "used_so_far_est": -26243.0
     },
     "private": {
       "credits_window": 0,
@@ -28,29 +28,29 @@
     }
   },
   "cycle": {
-    "elapsed_days": -12,
+    "elapsed_days": -11,
     "end": "2026-10-22",
-    "fraction_elapsed": -0.4,
+    "fraction_elapsed": -0.367,
     "length_days": 30,
-    "remaining_days": 42,
+    "remaining_days": 41,
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-11T23:34:54.717231+00:00",
+  "generated_at": "2026-09-12T01:39:12.139950+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [
     {
-      "daily_burn": 1138.0,
+      "daily_burn": 705.0,
       "name": "ftn",
       "private": false,
-      "projected": 34140.0,
-      "projected_pct": 8.5,
-      "recent7_credits": 7966,
-      "recent7_runs": 118,
-      "used_so_far": -13656.0
+      "projected": 21150.0,
+      "projected_pct": 5.3,
+      "recent7_credits": 4935,
+      "recent7_runs": 86,
+      "used_so_far": -7755.0
     },
     {
       "daily_burn": 561.1,
@@ -60,7 +60,7 @@
       "projected_pct": 4.2,
       "recent7_credits": 3928,
       "recent7_runs": 9,
-      "used_so_far": -6734.0
+      "used_so_far": -6173.0
     },
     {
       "daily_burn": 374.9,
@@ -70,7 +70,7 @@
       "projected_pct": 2.8,
       "recent7_credits": 2624,
       "recent7_runs": 13,
-      "used_so_far": -4498.0
+      "used_so_far": -4123.0
     },
     {
       "daily_burn": 374.6,
@@ -80,37 +80,17 @@
       "projected_pct": 2.8,
       "recent7_credits": 2622,
       "recent7_runs": 19,
-      "used_so_far": -4495.0
+      "used_so_far": -4120.0
     },
     {
-      "daily_burn": 182.1,
+      "daily_burn": 115.0,
       "name": "mailroom",
       "private": false,
-      "projected": 5464.0,
-      "projected_pct": 1.4,
-      "recent7_credits": 1275,
-      "recent7_runs": 10,
-      "used_so_far": -2186.0
-    },
-    {
-      "daily_burn": 100.1,
-      "name": "circleci-mcp",
-      "private": false,
-      "projected": 3004.0,
-      "projected_pct": 0.8,
-      "recent7_credits": 701,
-      "recent7_runs": 12,
-      "used_so_far": -1202.0
-    },
-    {
-      "daily_burn": 89.7,
-      "name": "vikunja-mcp",
-      "private": false,
-      "projected": 2691.0,
-      "projected_pct": 0.7,
-      "recent7_credits": 628,
-      "recent7_runs": 3,
-      "used_so_far": -1077.0
+      "projected": 3450.0,
+      "projected_pct": 0.9,
+      "recent7_credits": 805,
+      "recent7_runs": 7,
+      "used_so_far": -1265.0
     },
     {
       "daily_burn": 65.0,
@@ -120,27 +100,7 @@
       "projected_pct": 0.5,
       "recent7_credits": 455,
       "recent7_runs": 3,
-      "used_so_far": -780.0
-    },
-    {
-      "daily_burn": 64.0,
-      "name": "dagu-mcp",
-      "private": false,
-      "projected": 1920.0,
-      "projected_pct": 0.5,
-      "recent7_credits": 448,
-      "recent7_runs": 3,
-      "used_so_far": -768.0
-    },
-    {
-      "daily_burn": 61.6,
-      "name": "miniflux-feed-dedup",
-      "private": false,
-      "projected": 1847.0,
-      "projected_pct": 0.5,
-      "recent7_credits": 431,
-      "recent7_runs": 3,
-      "used_so_far": -739.0
+      "used_so_far": -715.0
     },
     {
       "daily_burn": 41.7,
@@ -150,7 +110,47 @@
       "projected_pct": 0.3,
       "recent7_credits": 292,
       "recent7_runs": 10,
-      "used_so_far": -501.0
+      "used_so_far": -459.0
+    },
+    {
+      "daily_burn": 32.9,
+      "name": "circleci-mcp",
+      "private": false,
+      "projected": 986.0,
+      "projected_pct": 0.2,
+      "recent7_credits": 230,
+      "recent7_runs": 2,
+      "used_so_far": -361.0
+    },
+    {
+      "daily_burn": 32.7,
+      "name": "dagu-mcp",
+      "private": false,
+      "projected": 981.0,
+      "projected_pct": 0.2,
+      "recent7_credits": 229,
+      "recent7_runs": 2,
+      "used_so_far": -360.0
+    },
+    {
+      "daily_burn": 31.6,
+      "name": "miniflux-feed-dedup",
+      "private": false,
+      "projected": 947.0,
+      "projected_pct": 0.2,
+      "recent7_credits": 221,
+      "recent7_runs": 2,
+      "used_so_far": -347.0
+    },
+    {
+      "daily_burn": 30.0,
+      "name": "vikunja-mcp",
+      "private": false,
+      "projected": 900.0,
+      "projected_pct": 0.2,
+      "recent7_credits": 210,
+      "recent7_runs": 1,
+      "used_so_far": -330.0
     },
     {
       "daily_burn": 14.7,
@@ -160,7 +160,7 @@
       "projected_pct": 0.1,
       "recent7_credits": 103,
       "recent7_runs": 2,
-      "used_so_far": -177.0
+      "used_so_far": -162.0
     },
     {
       "daily_burn": 6.6,
@@ -170,31 +170,31 @@
       "projected_pct": 0.0,
       "recent7_credits": 46,
       "recent7_runs": 2,
-      "used_so_far": -79.0
+      "used_so_far": -72.0
     }
   ],
   "rates": {
-    "recent30_daily": 3841.9,
-    "recent30_org": 115258,
-    "recent7_daily": 3074.1,
-    "recent7_org": 21519
+    "recent30_daily": 3742.2,
+    "recent30_org": 112267,
+    "recent7_daily": 2385.7,
+    "recent7_org": 16700
   },
   "windows": {
     "last-24-hours": {
-      "credits": 480,
-      "runs": 44
+      "credits": 0,
+      "runs": 49
     },
     "last-30-days": {
-      "credits": 115258,
-      "runs": 1086
+      "credits": 112267,
+      "runs": 1044
     },
     "last-7-days": {
-      "credits": 21519,
-      "runs": 207
+      "credits": 16700,
+      "runs": 158
     },
     "last-90-days": {
-      "credits": 270563,
-      "runs": 2521
+      "credits": 267803,
+      "runs": 2486
     }
   }
 }
