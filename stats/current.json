@@ -9,7 +9,7 @@
       "projected_pct": 13.4,
       "recent30_credits": 108308,
       "recent30_pct": 27.1,
-      "runs": 196,
+      "runs": 208,
       "status": "on-track",
       "used_so_far_est": -17807.0
     },
@@ -36,7 +36,7 @@
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-13T01:29:46.963197+00:00",
+  "generated_at": "2026-09-13T06:49:29.204515+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -59,7 +59,7 @@
       "projected": 11246.0,
       "projected_pct": 2.8,
       "recent7_credits": 2624,
-      "recent7_runs": 14,
+      "recent7_runs": 17,
       "used_so_far": -3749.0
     },
     {
@@ -159,7 +159,7 @@
       "projected": 197.0,
       "projected_pct": 0.0,
       "recent7_credits": 46,
-      "recent7_runs": 8,
+      "recent7_runs": 10,
       "used_so_far": -66.0
     },
     {
@@ -169,7 +169,7 @@
       "projected": 0.0,
       "projected_pct": 0.0,
       "recent7_credits": 0,
-      "recent7_runs": 0,
+      "recent7_runs": 7,
       "used_so_far": -0.0
     }
   ],
@@ -182,19 +182,19 @@
   "windows": {
     "last-24-hours": {
       "credits": 0,
-      "runs": 12
+      "runs": 0
     },
     "last-30-days": {
       "credits": 108308,
-      "runs": 1064
+      "runs": 1076
     },
     "last-7-days": {
       "credits": 12465,
-      "runs": 196
+      "runs": 208
     },
     "last-90-days": {
       "credits": 267524,
-      "runs": 2534
+      "runs": 2546
     }
   }
 }
