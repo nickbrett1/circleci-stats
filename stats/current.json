@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 12465,
-      "daily_burn": 1780.7,
-      "days_to_runout": 225,
+      "credits_window": 9613,
+      "daily_burn": 1373.3,
+      "days_to_runout": 291,
       "limit": 400000,
-      "projected": 53421.0,
-      "projected_pct": 13.4,
-      "recent30_credits": 108308,
-      "recent30_pct": 27.1,
-      "runs": 208,
+      "projected": 41199.0,
+      "projected_pct": 10.3,
+      "recent30_credits": 107055,
+      "recent30_pct": 26.8,
+      "runs": 177,
       "status": "on-track",
-      "used_so_far_est": -17807.0
+      "used_so_far_est": -12360.0
     },
     "private": {
       "credits_window": 0,
@@ -28,139 +28,89 @@
     }
   },
   "cycle": {
-    "elapsed_days": -10,
+    "elapsed_days": -9,
     "end": "2026-10-22",
-    "fraction_elapsed": -0.333,
+    "fraction_elapsed": -0.3,
     "length_days": 30,
-    "remaining_days": 40,
+    "remaining_days": 39,
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-13T23:41:16.403170+00:00",
+  "generated_at": "2026-09-14T01:47:17.268533+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [
     {
-      "daily_burn": 661.1,
+      "daily_burn": 591.7,
       "name": "ftn",
       "private": false,
-      "projected": 19834.0,
-      "projected_pct": 5.0,
-      "recent7_credits": 4628,
-      "recent7_runs": 112,
-      "used_so_far": -6611.0
+      "projected": 17751.0,
+      "projected_pct": 4.4,
+      "recent7_credits": 4142,
+      "recent7_runs": 106,
+      "used_so_far": -5325.0
     },
     {
-      "daily_burn": 374.9,
+      "daily_burn": 343.1,
       "name": "deepseek-balance",
       "private": false,
-      "projected": 11246.0,
-      "projected_pct": 2.8,
-      "recent7_credits": 2624,
-      "recent7_runs": 17,
-      "used_so_far": -3749.0
+      "projected": 10294.0,
+      "projected_pct": 2.6,
+      "recent7_credits": 2402,
+      "recent7_runs": 15,
+      "used_so_far": -3088.0
     },
     {
-      "daily_burn": 374.6,
+      "daily_burn": 342.6,
       "name": "pshelf",
       "private": false,
-      "projected": 11237.0,
-      "projected_pct": 2.8,
-      "recent7_credits": 2622,
-      "recent7_runs": 33,
-      "used_so_far": -3746.0
+      "projected": 10277.0,
+      "projected_pct": 2.6,
+      "recent7_credits": 2398,
+      "recent7_runs": 31,
+      "used_so_far": -3083.0
     },
     {
-      "daily_burn": 115.0,
+      "daily_burn": 34.3,
       "name": "mailroom",
       "private": false,
-      "projected": 3450.0,
-      "projected_pct": 0.9,
-      "recent7_credits": 805,
-      "recent7_runs": 7,
-      "used_so_far": -1150.0
+      "projected": 1029.0,
+      "projected_pct": 0.3,
+      "recent7_credits": 240,
+      "recent7_runs": 1,
+      "used_so_far": -309.0
     },
     {
-      "daily_burn": 65.0,
+      "daily_burn": 31.9,
       "name": "gaggle",
       "private": false,
-      "projected": 1950.0,
-      "projected_pct": 0.5,
-      "recent7_credits": 455,
-      "recent7_runs": 3,
-      "used_so_far": -650.0
+      "projected": 956.0,
+      "projected_pct": 0.2,
+      "recent7_credits": 223,
+      "recent7_runs": 1,
+      "used_so_far": -287.0
     },
     {
-      "daily_burn": 41.7,
+      "daily_burn": 29.7,
       "name": "parquet-peek",
       "private": false,
-      "projected": 1251.0,
-      "projected_pct": 0.3,
-      "recent7_credits": 292,
-      "recent7_runs": 10,
-      "used_so_far": -417.0
-    },
-    {
-      "daily_burn": 32.9,
-      "name": "circleci-mcp",
-      "private": false,
-      "projected": 986.0,
+      "projected": 891.0,
       "projected_pct": 0.2,
-      "recent7_credits": 230,
-      "recent7_runs": 2,
-      "used_so_far": -329.0
+      "recent7_credits": 208,
+      "recent7_runs": 8,
+      "used_so_far": -267.0
     },
     {
-      "daily_burn": 32.7,
+      "daily_burn": 0.0,
       "name": "dagu-mcp",
       "private": false,
-      "projected": 981.0,
-      "projected_pct": 0.2,
-      "recent7_credits": 229,
-      "recent7_runs": 2,
-      "used_so_far": -327.0
-    },
-    {
-      "daily_burn": 31.6,
-      "name": "miniflux-feed-dedup",
-      "private": false,
-      "projected": 947.0,
-      "projected_pct": 0.2,
-      "recent7_credits": 221,
-      "recent7_runs": 2,
-      "used_so_far": -316.0
-    },
-    {
-      "daily_burn": 30.0,
-      "name": "vikunja-mcp",
-      "private": false,
-      "projected": 900.0,
-      "projected_pct": 0.2,
-      "recent7_credits": 210,
-      "recent7_runs": 1,
-      "used_so_far": -300.0
-    },
-    {
-      "daily_burn": 14.7,
-      "name": "nas-port-mcp",
-      "private": false,
-      "projected": 441.0,
-      "projected_pct": 0.1,
-      "recent7_credits": 103,
-      "recent7_runs": 2,
-      "used_so_far": -147.0
-    },
-    {
-      "daily_burn": 6.6,
-      "name": "stripe-toddler",
-      "private": false,
-      "projected": 197.0,
+      "projected": 0.0,
       "projected_pct": 0.0,
-      "recent7_credits": 46,
-      "recent7_runs": 10,
-      "used_so_far": -66.0
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
     },
     {
       "daily_burn": 0.0,
@@ -171,13 +121,63 @@
       "recent7_credits": 0,
       "recent7_runs": 7,
       "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "stripe-toddler",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 8,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "miniflux-feed-dedup",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "vikunja-mcp",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "circleci-mcp",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "nas-port-mcp",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
     }
   ],
   "rates": {
-    "recent30_daily": 3610.3,
-    "recent30_org": 108308,
-    "recent7_daily": 1780.7,
-    "recent7_org": 12465
+    "recent30_daily": 3568.5,
+    "recent30_org": 107055,
+    "recent7_daily": 1373.3,
+    "recent7_org": 9613
   },
   "windows": {
     "last-24-hours": {
@@ -185,16 +185,16 @@
       "runs": 0
     },
     "last-30-days": {
-      "credits": 108308,
-      "runs": 1076
+      "credits": 107055,
+      "runs": 1067
     },
     "last-7-days": {
-      "credits": 12465,
-      "runs": 208
+      "credits": 9613,
+      "runs": 177
     },
     "last-90-days": {
-      "credits": 267524,
-      "runs": 2546
+      "credits": 264302,
+      "runs": 2527
     }
   }
 }
