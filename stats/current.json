@@ -1,17 +1,17 @@
 {
   "buckets": {
     "oss": {
-      "credits_window": 480,
-      "daily_burn": 68.6,
-      "days_to_runout": 5833,
+      "credits_window": 0,
+      "daily_burn": 0.0,
+      "days_to_runout": null,
       "limit": 400000,
-      "projected": 2057.0,
-      "projected_pct": 0.5,
-      "recent30_credits": 100837,
-      "recent30_pct": 25.2,
-      "runs": 71,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent30_credits": 96608,
+      "recent30_pct": 24.2,
+      "runs": 63,
       "status": "on-track",
-      "used_so_far_est": -411.0
+      "used_so_far_est": -0.0
     },
     "private": {
       "credits_window": 0,
@@ -28,30 +28,20 @@
     }
   },
   "cycle": {
-    "elapsed_days": -6,
+    "elapsed_days": -5,
     "end": "2026-10-22",
-    "fraction_elapsed": -0.2,
+    "fraction_elapsed": -0.167,
     "length_days": 30,
-    "remaining_days": 36,
+    "remaining_days": 35,
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-17T23:08:50.725148+00:00",
+  "generated_at": "2026-09-18T01:39:21.960851+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [
-    {
-      "daily_burn": 68.6,
-      "name": "ftn",
-      "private": false,
-      "projected": 2057.0,
-      "projected_pct": 0.5,
-      "recent7_credits": 480,
-      "recent7_runs": 38,
-      "used_so_far": -411.0
-    },
     {
       "daily_burn": 0.0,
       "name": "dagu-mcp",
@@ -134,6 +124,16 @@
     },
     {
       "daily_burn": 0.0,
+      "name": "ftn",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 30,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
       "name": "pshelf",
       "private": false,
       "projected": 0.0,
@@ -174,10 +174,10 @@
     }
   ],
   "rates": {
-    "recent30_daily": 3361.2,
-    "recent30_org": 100837,
-    "recent7_daily": 68.6,
-    "recent7_org": 480
+    "recent30_daily": 3220.3,
+    "recent30_org": 96608,
+    "recent7_daily": 0.0,
+    "recent7_org": 0
   },
   "windows": {
     "last-24-hours": {
@@ -185,16 +185,16 @@
       "runs": 0
     },
     "last-30-days": {
-      "credits": 100837,
-      "runs": 994
+      "credits": 96608,
+      "runs": 960
     },
     "last-7-days": {
-      "credits": 480,
-      "runs": 71
+      "credits": 0,
+      "runs": 63
     },
     "last-90-days": {
-      "credits": 256406,
-      "runs": 2424
+      "credits": 252840,
+      "runs": 2401
     }
   }
 }
