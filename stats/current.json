@@ -7,8 +7,8 @@
       "limit": 400000,
       "projected": 0.0,
       "projected_pct": 0.0,
-      "recent30_credits": 88023,
-      "recent30_pct": 22.0,
+      "recent30_credits": 79174,
+      "recent30_pct": 19.8,
       "runs": 0,
       "status": "on-track",
       "used_so_far_est": -0.0
@@ -28,15 +28,15 @@
     }
   },
   "cycle": {
-    "elapsed_days": -3,
+    "elapsed_days": -2,
     "end": "2026-10-22",
-    "fraction_elapsed": -0.1,
+    "fraction_elapsed": -0.067,
     "length_days": 30,
-    "remaining_days": 33,
+    "remaining_days": 32,
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-20T23:42:00.034384+00:00",
+  "generated_at": "2026-09-21T01:46:47.300098+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -44,37 +44,7 @@
   "projects": [
     {
       "daily_burn": 0.0,
-      "name": "dagu-mcp",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "agent-swarm",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "stripe-toddler",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "miniflux-feed-dedup",
+      "name": "ftn",
       "private": false,
       "projected": 0.0,
       "projected_pct": 0.0,
@@ -94,37 +64,7 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "mailroom",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "vikunja-mcp",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "parquet-peek",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "ftn",
+      "name": "stripe-toddler",
       "private": false,
       "projected": 0.0,
       "projected_pct": 0.0,
@@ -144,16 +84,6 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "circleci-mcp",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
       "name": "gaggle",
       "private": false,
       "projected": 0.0,
@@ -164,7 +94,27 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "nas-port-mcp",
+      "name": "agent-swarm",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "parquet-peek",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "mailroom",
       "private": false,
       "projected": 0.0,
       "projected_pct": 0.0,
@@ -174,8 +124,8 @@
     }
   ],
   "rates": {
-    "recent30_daily": 2934.1,
-    "recent30_org": 88023,
+    "recent30_daily": 2639.1,
+    "recent30_org": 79174,
     "recent7_daily": 0.0,
     "recent7_org": 0
   },
@@ -185,16 +135,16 @@
       "runs": 0
     },
     "last-30-days": {
-      "credits": 88023,
-      "runs": 909
+      "credits": 79174,
+      "runs": 843
     },
     "last-7-days": {
       "credits": 0,
       "runs": 0
     },
     "last-90-days": {
-      "credits": 244600,
-      "runs": 2321
+      "credits": 239068,
+      "runs": 2287
     }
   }
 }
