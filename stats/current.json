@@ -36,7 +36,7 @@
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-21T19:46:02.841579+00:00",
+  "generated_at": "2026-09-21T22:51:39.012580+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -44,27 +44,7 @@
   "projects": [
     {
       "daily_burn": 0.0,
-      "name": "pshelf",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "mailroom",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
-      "name": "parquet-peek",
+      "name": "ftn",
       "private": false,
       "projected": 0.0,
       "projected_pct": 0.0,
@@ -84,7 +64,27 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "ftn",
+      "name": "stripe-toddler",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "pshelf",
+      "private": false,
+      "projected": 0.0,
+      "projected_pct": 0.0,
+      "recent7_credits": 0,
+      "recent7_runs": 0,
+      "used_so_far": -0.0
+    },
+    {
+      "daily_burn": 0.0,
+      "name": "gaggle",
       "private": false,
       "projected": 0.0,
       "projected_pct": 0.0,
@@ -104,7 +104,7 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "stripe-toddler",
+      "name": "parquet-peek",
       "private": false,
       "projected": 0.0,
       "projected_pct": 0.0,
@@ -114,7 +114,7 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "gaggle",
+      "name": "mailroom",
       "private": false,
       "projected": 0.0,
       "projected_pct": 0.0,
