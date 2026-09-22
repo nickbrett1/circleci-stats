@@ -7,8 +7,8 @@
       "limit": 400000,
       "projected": 0.0,
       "projected_pct": 0.0,
-      "recent30_credits": 79174,
-      "recent30_pct": 19.8,
+      "recent30_credits": 72483,
+      "recent30_pct": 18.1,
       "runs": 0,
       "status": "on-track",
       "used_so_far_est": -0.0
@@ -28,15 +28,15 @@
     }
   },
   "cycle": {
-    "elapsed_days": -2,
+    "elapsed_days": -1,
     "end": "2026-10-22",
-    "fraction_elapsed": -0.067,
+    "fraction_elapsed": -0.033,
     "length_days": 30,
-    "remaining_days": 32,
+    "remaining_days": 31,
     "start": "2026-09-23",
     "start_day": 23
   },
-  "generated_at": "2026-09-21T22:51:39.012580+00:00",
+  "generated_at": "2026-09-22T01:17:07.118347+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -84,16 +84,6 @@
     },
     {
       "daily_burn": 0.0,
-      "name": "gaggle",
-      "private": false,
-      "projected": 0.0,
-      "projected_pct": 0.0,
-      "recent7_credits": 0,
-      "recent7_runs": 0,
-      "used_so_far": -0.0
-    },
-    {
-      "daily_burn": 0.0,
       "name": "agent-swarm",
       "private": false,
       "projected": 0.0,
@@ -124,8 +114,8 @@
     }
   ],
   "rates": {
-    "recent30_daily": 2639.1,
-    "recent30_org": 79174,
+    "recent30_daily": 2416.1,
+    "recent30_org": 72483,
     "recent7_daily": 0.0,
     "recent7_org": 0
   },
@@ -135,16 +125,16 @@
       "runs": 0
     },
     "last-30-days": {
-      "credits": 79174,
-      "runs": 843
+      "credits": 72483,
+      "runs": 799
     },
     "last-7-days": {
       "credits": 0,
       "runs": 0
     },
     "last-90-days": {
-      "credits": 239068,
-      "runs": 2287
+      "credits": 235933,
+      "runs": 2265
     }
   }
 }
