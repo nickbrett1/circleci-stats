@@ -28,15 +28,15 @@
     }
   },
   "cycle": {
-    "elapsed_days": -14,
+    "elapsed_days": -13,
     "end": "2026-11-22",
-    "fraction_elapsed": -0.452,
+    "fraction_elapsed": -0.419,
     "length_days": 31,
-    "remaining_days": 45,
+    "remaining_days": 44,
     "start": "2026-10-23",
     "start_day": 23
   },
-  "generated_at": "2026-10-09T21:21:04.085220+00:00",
+  "generated_at": "2026-10-10T01:20:14.619278+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
@@ -62,8 +62,8 @@
       "runs": 0
     },
     "last-90-days": {
-      "credits": 197288,
-      "runs": 1886
+      "credits": 196376,
+      "runs": 1874
     }
   }
 }
