@@ -7,8 +7,8 @@
       "limit": 400000,
       "projected": 0.0,
       "projected_pct": 0.0,
-      "recent30_credits": 480,
-      "recent30_pct": 0.1,
+      "recent30_credits": 0,
+      "recent30_pct": 0.0,
       "runs": 0,
       "status": "on-track",
       "used_so_far_est": -0.0
@@ -28,23 +28,23 @@
     }
   },
   "cycle": {
-    "elapsed_days": -13,
+    "elapsed_days": -12,
     "end": "2026-11-22",
-    "fraction_elapsed": -0.419,
+    "fraction_elapsed": -0.387,
     "length_days": 31,
-    "remaining_days": 44,
+    "remaining_days": 43,
     "start": "2026-10-23",
     "start_day": 23
   },
-  "generated_at": "2026-10-10T22:10:23.111123+00:00",
+  "generated_at": "2026-10-11T01:21:29.828981+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
   },
   "projects": [],
   "rates": {
-    "recent30_daily": 16.0,
-    "recent30_org": 480,
+    "recent30_daily": 0.0,
+    "recent30_org": 0,
     "recent7_daily": 0.0,
     "recent7_org": 0
   },
@@ -54,8 +54,8 @@
       "runs": 0
     },
     "last-30-days": {
-      "credits": 480,
-      "runs": 71
+      "credits": 0,
+      "runs": 63
     },
     "last-7-days": {
       "credits": 0,
