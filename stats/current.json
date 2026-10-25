@@ -28,15 +28,15 @@
     }
   },
   "cycle": {
-    "elapsed_days": 1,
+    "elapsed_days": 2,
     "end": "2026-11-22",
-    "fraction_elapsed": 0.032,
+    "fraction_elapsed": 0.065,
     "length_days": 31,
-    "remaining_days": 30,
+    "remaining_days": 29,
     "start": "2026-10-23",
     "start_day": 23
   },
-  "generated_at": "2026-10-24T22:00:14.676842+00:00",
+  "generated_at": "2026-10-25T00:35:58.179282+00:00",
   "limits": {
     "oss": 400000,
     "private": 30000
