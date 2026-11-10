@@ -33,10 +33,26 @@ jobs:
           git add stats/
           if git diff --cached --quiet; then
             echo "no changes to stats"
-          else
-            git commit -m "chore: refresh circleci credit stats"
-            git push
+            exit 0
           fi
+          git commit -m "chore: refresh circleci credit stats"
+
+          # GitHub occasionally fails the ref update with a server-side
+          # "remote: fatal error in commit_refs" / "! [remote rejected]
+          # main -> main (failure)". That is transient, not a permissions
+          # problem (main has no branch protection or rulesets), so retry with
+          # a short backoff instead of failing the whole run.
+          # Seen on run 42848557749 (2026-11-10T15:50:37Z).
+          for attempt in 1 2 3 4 5; do
+            if git push; then
+              echo "push succeeded on attempt ${attempt}"
+              exit 0
+            fi
+            echo "::warning::push attempt ${attempt} failed"
+            sleep $(( attempt * 15 ))
+          done
+          echo "::error::push failed after 5 attempts; stats were collected but not committed"
+          exit 1
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
